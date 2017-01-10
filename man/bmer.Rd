@@ -43,8 +43,9 @@ the \linkS4class{bmerBuild} to \code{fit_bmer_build}.
 \description{
 Fit a Bayesian mixed effects regression with a maximal random effects structure
 and weakly informative priors in Stan through the rstan interface using NUTS.
-Additional details not covered here can be found in the vignette at
-\url{https://github.com/CDEager/bmers/inst/doc/using-bmers.html}
+Additional details not covered here can be found in the vignette.  To get to the
+vignette, go to the package Index at the bottom of the page and click on
+"User guides, package vignettes and other documentation".
 }
 \details{
 The \code{formula} should have the form \code{response ~ fixed | random_groups}

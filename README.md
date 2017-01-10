@@ -12,6 +12,6 @@ Prior to installing *bmers*, the *rstan* package must already be installed and f
 
 &nbsp;
 
-A vignette is provided which shows how to use the major functions **bmer**, **build_bmer_model** and **fit_bmer_build**, and also demonstrates some of the basic querying functions for **bmerBuild** and **bmerFit** objects: <https://github.com/CDEager/bmers/inst/doc/using-bmers.html>.
+A vignette is provided which shows how to use the major functions **bmer**, **build_bmer_model** and **fit_bmer_build**, and also demonstrates some of the basic querying functions for **bmerBuild** and **bmerFit** objects.
 
 &nbsp;

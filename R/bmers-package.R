@@ -10,7 +10,8 @@
 #'
 #' @section Vignette:
 #' A vignette demonstrating how to use \emph{bmers} can be found
-#' at \url{https://github.com/CDEager/bmers/inst/doc/using-bmers.html}
+#' by going to the package Index at the bottom of the page and clicking on
+#' "User guides, package vignettes and other documentation".
 #'
 #' @section Fit a Bayesian mixed effects regression:
 #' \code{\link{bmer}},  \code{\link{build_bmer_model}},  \code{\link{fit_bmer_build}},  \code{\link{bmer_control}}
