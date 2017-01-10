@@ -15,3 +15,7 @@ Prior to installing *bmers*, the *rstan* package must already be installed and f
 A vignette is provided which shows how to use the major functions **bmer**, **build_bmer_model** and **fit_bmer_build**, and also demonstrates some of the basic querying functions for **bmerBuild** and **bmerFit** objects.
 
 &nbsp;
+
+**NOTE:** If you fit a model using **bmer** or **fit_bmer_build** which requires a new **stanmodel** to be compiled (if warmup/sampling does not begin for a minute or so after you enter the **bmer** / **fit_bmer_build** call, then *rstan* is creating a new **stanmodel**), and then try to fit another model which uses this same **stanmodel** in the same R session, the session will crash.  I will add a patch that fixes this.  For the time being, after you fit a new type of model (one which requires the compilation of a new **stanmodel**), save your workspace, close the R sessions, and reopen.  From there you should be able to fit that type of model as many times as you want within the same R session without issue, and without needing to recompile that type of model.
+
+&nbsp;
