@@ -1,0 +1,13 @@
+citHeader("To cite bmers in publications use:")
+
+citEntry(entry = "Manual",
+    title = "bmers: Bayesian mixed effects regressions fit with Stan",
+    author = personList(person("Christopher D.", "Eager")),
+    year = "2017",
+    url = "https://github.com/CDEager/bmers",
+    
+    textVersion =
+    paste("Eager, Christopher D. (2017).",
+          "bmers: Bayesian mixed effects regressions fit with Stan.",
+          "https://github.com/CDEager/bmers")
+)

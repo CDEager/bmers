@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Christopher D. Eager" />
+
+<meta name="date" content="2017-01-10" />
+
+<title>Using bmers</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Using bmers</h1>
+<h4 class="author"><em>Christopher D. Eager</em></h4>
+<h4 class="date"><em>2017-01-10</em></h4>
+
+
+
+<style>
+pre {
+  overflow-x: auto;
+}
+pre code {
+  word-wrap: normal;
+  white-space: pre;
+}
+</style>
+<div id="the-bmers-package" class="section level1">
+<h1>The <em>bmers</em> package</h1>
+<p>The <em>bmers</em> package (Bayesian Mixed Effects Regressions fit with Stan) fits Bayesian mixed effects regressions with weakly informative priors and maximal random effects structures in <em>Stan</em> with the No U-Turn Sampler (through the <em>RStan</em> interface). The maximal random effects structure is determined automatically, and only the fixed effects structure and the random effects grouping factors need to be specified. Continuous variables are automatically scaled, and factor contrasts are automatically set; neither of these needs to be done beforehand. NA values in both the fixed effects and random effects are supported through the use of sum contrasts with NAs set to zero in the model matrix.</p>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<p>Prior to installing <em>bmers</em>, the <em>rstan</em> package must already be installed and functioning (see instructions here: <a href="https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started" class="uri">https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started</a>), and the <em>devtools</em> package must also already be installed; to install <em>devtools</em> call <code>install.packages(devtools)</code>. Then, to install <em>bmers</em>, call:</p>
+<p> </p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">&quot;CDEager/bmers&quot;</span>)</code></pre></div>
+<p> </p>
+</div>
+</div>
+<div id="example-binomial-model-from-a-linguistics-experiment" class="section level1">
+<h1>Example binomial model from a linguistics experiment</h1>
+<p>In this vignette, the use of <em>bmers</em> is demonstrated using data from a linguistic experiment examining the perception of prominence (Cole et al. 2015; see <em>References</em> at the end of this document). Specifically, we will focus on the target-word prominence judgements of the transcribers. The data has the following format:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(ehtp)
+<span class="co">#&gt;   transcriber   target_word accent_pattern marked_prominent</span>
+<span class="co">#&gt; 1         A01    university        Primary                1</span>
+<span class="co">#&gt; 2         A01   information     Unaccented                0</span>
+<span class="co">#&gt; 3         A01 understanding     Unaccented                0</span>
+<span class="co">#&gt; 4         A01    revolution        Primary                1</span>
+<span class="co">#&gt; 5         A01 opportunities        Primary                1</span>
+<span class="co">#&gt; 6         A01     ambiguity        Primary                1</span></code></pre></div>
+<p>For our purposes, the most important things to note are that:</p>
+<ul>
+<li>The response (<em>marked_prominent</em>) is binary, with 1 indicating a transcriber marked the target word as prominent and 0 indicating they did not.</li>
+<li>There is one three-level factor as a predictor (<em>accent_pattern</em>), with levels “Unaccented”, “EarlyHigh” and “Primary”.</li>
+<li>There are two random grouping factors, <em>transcriber</em> and <em>target_word</em>, and <em>accent_pattern</em> varies both within-transcriber and within-target-word</li>
+<li>The hypothesis is that “EarlyHigh” will be the most likely to be marked, followed by “Primary”, followed by “Unstressed” as the least likely to be marked.</li>
+</ul>
+<p>To get started, we attach the package.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(bmers)
+<span class="co">#&gt; Loading required package: formula.tools</span>
+<span class="co">#&gt; Loading required package: operator.tools</span>
+<span class="co">#&gt; operator.tools-1.4.4 - Copyright © 2017 Decision Patterns</span>
+<span class="co">#&gt; formula.tools-1.5.4 - Copyright © 2017 Decision Patterns</span>
+<span class="co">#&gt; Loading required package: Matrix</span>
+<span class="co">#&gt; Loading required package: rstan</span>
+<span class="co">#&gt; Loading required package: ggplot2</span>
+<span class="co">#&gt; Find out what's changed in ggplot2 at http://github.com/tidyverse/ggplot2/releases.</span>
+<span class="co">#&gt; Loading required package: StanHeaders</span>
+<span class="co">#&gt; rstan (Version 2.14.1, packaged: 2016-12-28 14:55:41 UTC, GitRev: 5fa1e80eb817)</span>
+<span class="co">#&gt; For execution on a local, multicore CPU with excess RAM we recommend calling</span>
+<span class="co">#&gt; rstan_options(auto_write = TRUE)</span>
+<span class="co">#&gt; options(mc.cores = parallel::detectCores())</span>
+<span class="co">#&gt; Loading required package: stringr</span></code></pre></div>
+<p>As can be seen in the informational messages from <em>rstan</em> upon attaching <em>bmers</em>, if you have a multicore CPU, you can save time by running chains in parallel, and this can be set as the default for the session by executing the following:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rstan_options</span>(<span class="dt">auto_write =</span> <span class="ot">TRUE</span>)
+<span class="kw">options</span>(<span class="dt">mc.cores =</span> parallel::<span class="kw">detectCores</span>())</code></pre></div>
+<p>The <strong>bmer</strong> function is a shortcut for two modular functions <strong>build_bmer_model</strong> and <strong>fit_bmer_build</strong>. If you are new to <em>bmers</em>, it is recommended that you try using the two functions separately at first so you can ensure that the assumptions <em>bmers</em> makes about your data are as you intended.</p>
+<div id="build_bmer_model" class="section level3">
+<h3>build_bmer_model</h3>
+<p>For <strong>build_bmer_model</strong> we need to specify a formula, the data frame, the regression family, a model name, and, optionally, control parameters. For this problem we can execute the following:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ehtp_build &lt;-<span class="st"> </span><span class="kw">build_bmer_model</span>(marked_prominent ~<span class="st"> </span>accent_pattern |<span class="st"> </span>transcriber +<span class="st"> </span>target_word,
+    <span class="dt">data =</span> ehtp, <span class="dt">family =</span> binomial, <span class="dt">model_name =</span> <span class="st">&quot;Early High Target RPT&quot;</span>)</code></pre></div>
+<p>This call returns and object of class <strong>bmerBuild</strong> which can be summarized by simply calling the object:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ehtp_build
+<span class="co">#&gt; bmerBuild for model 'Early High Target RPT'</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; build_bmer_model(formula = marked_prominent ~ accent_pattern | </span>
+<span class="co">#&gt;     transcriber + target_word, data = ehtp, family = binomial, </span>
+<span class="co">#&gt;     model_name = &quot;Early High Target RPT&quot;)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Observations: 900</span>
+<span class="co">#&gt; Parameters (fixed and random): 195</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Response:</span>
+<span class="co">#&gt;    Family    Name                Class                                 Levels   </span>
+<span class="co">#&gt;  binomial    marked_prominent    binary factor coded as integer 0/1    0, 1     </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Fixed Effects:</span>
+<span class="co">#&gt;    Variables</span>
+<span class="co">#&gt;       Factor           Ordered   Levels   Contrasts  </span>
+<span class="co">#&gt;       accent_pattern   FALSE     3        sum        </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;    Terms                </span>
+<span class="co">#&gt;       accent_pattern    </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Random Effects:</span>
+<span class="co">#&gt;    Group          Levels    Between-Group Factors    Between-Group Covariates   </span>
+<span class="co">#&gt;    transcriber    30        N/A                      N/A                        </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      The maximal random effect structure is random intercepts and random slopes for:                        </span>
+<span class="co">#&gt;       accent_pattern    </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;    Group          Levels    Between-Group Factors    Between-Group Covariates   </span>
+<span class="co">#&gt;    target_word    30        N/A                      N/A                        </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      The maximal random effect structure is random intercepts and random slopes for:                        </span>
+<span class="co">#&gt;       accent_pattern    </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Messages:</span>
+<span class="co">#&gt;    scaling covariates</span>
+<span class="co">#&gt;    sum contrasts set for unordered factors</span>
+<span class="co">#&gt;    scaled orthogonal polynomial contrasts set for ordered factors</span></code></pre></div>
+<p>The output gives the function call which produced the <strong>bmerBuild</strong>, the number of observations, the total number of parameters, and then information about the response, fixed effects, and random effects.</p>
+<p>The fixed effects portion has two sections, <em>variables</em> and <em>terms</em>. The <em>variables</em> section gives information about each column in the fixed effects model frame. For factors, it lists whether or not the factor is ordered, how many levels there are, and the type of contrasts that were applied in the regression. For covariates (continuous predictors), which are not included in this example, the sample mean and standard deviation in the raw data are given, and then a logical is provided indicating whether or not the covariate was put on unit scale in the regression (which will always be TRUE unless <strong>bmer_control</strong> is altered from its defaults).</p>
+<p>The <em>terms</em> section gives all of the terms in the expanded formula (i.e. interactions would be listed in addition to main effects if there were any).</p>
+<p>The random effects section is separated by random effect grouping factor. For each group, the number of members/levels is given, as well as a list of factors and covariates which do not vary within individual members of the group. This is then followed by a definition of the maximal random effects structure (random intercepts and random slopes for all terms which vary within-group). In this case, the single predictor varies both within-transcriber and within-target-word, and so random slopes for the predictor are fit for both groups.</p>
+<p>Finally, the messages section indicates what scaling and contrasts the control parameters applied to the data (in this case it indicates that if there were covariates, they were scaled, and if there were factors, then sum contrasts and scaled orthogonal polynomial contrasts were set depending on whether they were ordered).</p>
+<p>The output is printed with a wide format, and so to view it easily you should maximize the console window in your R session.</p>
+<p>A list of the information used to produce this printed output can be obtained with the <strong>build_summary</strong> function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ehtp_build_summ &lt;-<span class="st"> </span><span class="kw">build_summary</span>(ehtp_build)
+<span class="kw">names</span>(ehtp_build_summ)
+<span class="co">#&gt;  [1] &quot;call&quot;     &quot;name&quot;     &quot;family&quot;   &quot;frame&quot;    &quot;N&quot;        &quot;PQ&quot;       &quot;response&quot; &quot;fixed&quot;    &quot;random&quot;   &quot;code&quot;     &quot;data&quot;     &quot;control&quot;  &quot;messages&quot; &quot;warnings&quot;</span></code></pre></div>
+<p>Using these elements directly is not advised, as the list structure can get a bit complicated depending on the model. Instead, using the following query functions is recommended.</p>
+<p>To view the contrasts which were applied:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">contrs &lt;-<span class="st"> </span><span class="kw">get_contrasts</span>(ehtp_build)
+
+<span class="kw">names</span>(contrs)
+<span class="co">#&gt; [1] &quot;main_effects&quot;</span>
+
+<span class="kw">names</span>(contrs[[<span class="st">&quot;main_effects&quot;</span>]])
+<span class="co">#&gt; [1] &quot;accent_pattern&quot;</span>
+
+contrs[[<span class="st">&quot;main_effects&quot;</span>]][[<span class="st">&quot;accent_pattern&quot;</span>]]
+<span class="co">#&gt;            EarlyHigh Primary</span>
+<span class="co">#&gt; EarlyHigh          1       0</span>
+<span class="co">#&gt; Primary            0       1</span>
+<span class="co">#&gt; Unaccented        -1      -1</span></code></pre></div>
+<p>To view the <em>Stan</em> code:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cat_code</span>(ehtp_build)
+<span class="co">#&gt; // Stan mixed effects regression built with bmers version 0.1.0 for model 'Early High Target RPT'</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; // Priors</span>
+<span class="co">#&gt;   // Fixed Effects</span>
+<span class="co">#&gt;     // beta ~ student_t(nu_beta,0,scale_beta)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   // Random Effects for transcriber (Group 1)</span>
+<span class="co">#&gt;     // gamma_1 ~ mult_normal(0,Sigma_1)</span>
+<span class="co">#&gt;     // Sigma_1 = diag(sigma_1) * omega_1 * diag(sigma_1)'</span>
+<span class="co">#&gt;     // sigma_1[1] ~ half_normal(0,sc_q0)</span>
+<span class="co">#&gt;     // sigma_1[2:Q_1] ~ half_normal(0,sc_qs)</span>
+<span class="co">#&gt;     // omega_1 ~ lkj_corr(eta_q)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   // Random Effects for target_word (Group 2)</span>
+<span class="co">#&gt;     // gamma_2 ~ mult_normal(0,Sigma_2)</span>
+<span class="co">#&gt;     // Sigma_2 = diag(sigma_2) * omega_2 * diag(sigma_2)'</span>
+<span class="co">#&gt;     // sigma_2[1] ~ half_normal(0,sc_q0)</span>
+<span class="co">#&gt;     // sigma_2[2:Q_2] ~ half_normal(0,sc_qs)</span>
+<span class="co">#&gt;     // omega_2 ~ lkj_corr(eta_q)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   // Response Prior (Logistic)</span>
+<span class="co">#&gt;     // y ~ bernoulli_logit(Xb + Zg)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; functions {</span>
+<span class="co">#&gt;   matrix vec_to_mat_by_row(int R, int C, vector v){</span>
+<span class="co">#&gt;     matrix[R,C] m;</span>
+<span class="co">#&gt;     for(r in 1:R) m[r] = v[(C*(r-1)+1):(C*r)]';</span>
+<span class="co">#&gt;     return m;</span>
+<span class="co">#&gt;   }</span>
+<span class="co">#&gt; }</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; data {</span>
+<span class="co">#&gt;   int&lt;lower=0&gt; N;  // number of observations</span>
+<span class="co">#&gt;   int&lt;lower=0&gt; K;  // number of coefficients</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   int&lt;lower=0&gt; nz;  // num non-zero elements in model matrix</span>
+<span class="co">#&gt;   vector[nz] w;  // non-zero elements in model matrix</span>
+<span class="co">#&gt;   int&lt;lower=0&gt; v[nz];  // column indices for w</span>
+<span class="co">#&gt;   int&lt;lower=0&gt; u[N+1];  // row-start indices for non-zero elements in model matrix</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   int&lt;lower=0,upper=1&gt; y[N];  // binary response as integer 0/1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   int&lt;lower=0&gt; P;  // number of fixed effects</span>
+<span class="co">#&gt;   int&lt;lower=0&gt; G;  // number of random effect groups</span>
+<span class="co">#&gt;   int&lt;lower=0&gt; cindx[G,2];  // coefficient index for random effects</span>
+<span class="co">#&gt;   int&lt;lower=0&gt; M_1;  // number of transcriber members</span>
+<span class="co">#&gt;   int&lt;lower=0&gt; Q_1;  // number of transcriber effects per member</span>
+<span class="co">#&gt;   int&lt;lower=0&gt; M_2;  // number of target_word members</span>
+<span class="co">#&gt;   int&lt;lower=0&gt; Q_2;  // number of target_word effects per member</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   // (hyper) priors</span>
+<span class="co">#&gt;   real&lt;lower=0&gt; scale_beta;  // prior scale for betas</span>
+<span class="co">#&gt;   real&lt;lower=0&gt; nu_beta;  // degrees of freedom for beta t-dist prior</span>
+<span class="co">#&gt;   real&lt;lower=0&gt; sc_q0;  // prior scale for random intercept standard deviations</span>
+<span class="co">#&gt;   real&lt;lower=0&gt; sc_qs;  // prior scale for random slope standard deviations</span>
+<span class="co">#&gt;   real&lt;lower=0&gt; eta_q;  // shape for LKJ prior on random effects correlations</span>
+<span class="co">#&gt; }</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; parameters {</span>
+<span class="co">#&gt;   // all parameters sampled on unit scale or with cholesky factors and reparameterized</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   vector[P] beta_raw;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   matrix[Q_1,M_1] gamma_1_raw;</span>
+<span class="co">#&gt;   vector&lt;lower=0&gt;[Q_1] sigma_1_raw;</span>
+<span class="co">#&gt;   cholesky_factor_corr[Q_1] omega_1_raw;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   matrix[Q_2,M_2] gamma_2_raw;</span>
+<span class="co">#&gt;   vector&lt;lower=0&gt;[Q_2] sigma_2_raw;</span>
+<span class="co">#&gt;   cholesky_factor_corr[Q_2] omega_2_raw;</span>
+<span class="co">#&gt; }</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; transformed parameters {</span>
+<span class="co">#&gt;   vector&lt;lower=0&gt;[Q_1] sigma_1;  // standard deviation in the transcriber effects</span>
+<span class="co">#&gt;   vector&lt;lower=0&gt;[Q_2] sigma_2;  // standard deviation in the target_word effects</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   vector[K] coef;  // all coefficients</span>
+<span class="co">#&gt;   vector[N] y_hat;  // fitted values</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   coef[1:P] = scale_beta * beta_raw;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   sigma_1[1] = sc_q0 * sigma_1_raw[1];</span>
+<span class="co">#&gt;   sigma_1[2:Q_1] = sc_qs * sigma_1_raw[2:Q_1];</span>
+<span class="co">#&gt;   coef[cindx[1,1]:cindx[1,2]] = to_vector(rep_matrix(sigma_1,M_1) .* (omega_1_raw * gamma_1_raw));</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   sigma_2[1] = sc_q0 * sigma_2_raw[1];</span>
+<span class="co">#&gt;   sigma_2[2:Q_2] = sc_qs * sigma_2_raw[2:Q_2];</span>
+<span class="co">#&gt;   coef[cindx[2,1]:cindx[2,2]] = to_vector(rep_matrix(sigma_2,M_2) .* (omega_2_raw * gamma_2_raw));</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   y_hat = csr_matrix_times_vector(N,K,w,v,u,coef);</span>
+<span class="co">#&gt; }</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; model {</span>
+<span class="co">#&gt;   beta_raw ~ student_t(nu_beta,0,1);</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   to_vector(gamma_1_raw) ~ normal(0,1);</span>
+<span class="co">#&gt;   sigma_1_raw ~ normal(0,1);</span>
+<span class="co">#&gt;   omega_1_raw ~ lkj_corr_cholesky(eta_q);</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   to_vector(gamma_2_raw) ~ normal(0,1);</span>
+<span class="co">#&gt;   sigma_2_raw ~ normal(0,1);</span>
+<span class="co">#&gt;   omega_2_raw ~ lkj_corr_cholesky(eta_q);</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   y ~ bernoulli_logit(y_hat);</span>
+<span class="co">#&gt; }</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; generated quantities {</span>
+<span class="co">#&gt;   vector[N] log_lik;  // log-likelihod</span>
+<span class="co">#&gt;   vector[P] beta;  // fixed effects</span>
+<span class="co">#&gt;   matrix[M_1,Q_1] gamma_1;  // transcriber effects</span>
+<span class="co">#&gt;   matrix[Q_1,Q_1] omega_1;  // correlation in the transcriber effects</span>
+<span class="co">#&gt;   matrix[M_2,Q_2] gamma_2;  // target_word effects</span>
+<span class="co">#&gt;   matrix[Q_2,Q_2] omega_2;  // correlation in the target_word effects</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   for(n in 1:N) log_lik[n] = bernoulli_logit_lpmf(y[n] | y_hat[n]);</span>
+<span class="co">#&gt;   beta = coef[1:P];</span>
+<span class="co">#&gt;   gamma_1 = vec_to_mat_by_row(M_1,Q_1,coef[cindx[1,1]:cindx[1,2]]);</span>
+<span class="co">#&gt;   omega_1 = tcrossprod(omega_1_raw);</span>
+<span class="co">#&gt;   gamma_2 = vec_to_mat_by_row(M_2,Q_2,coef[cindx[2,1]:cindx[2,2]]);</span>
+<span class="co">#&gt;   omega_2 = tcrossprod(omega_2_raw);</span>
+<span class="co">#&gt; }</span></code></pre></div>
+<p>To write the <em>Stan</em> code to a file:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cat_code</span>(ehtp_build, <span class="dt">file =</span> <span class="st">&quot;ehtp_model.stan&quot;</span>)</code></pre></div>
+<p>The priors listed in the code above make reference to arguments to <strong>bmer_control</strong>. To view the names of the parameters which will be included in the model that we fit later with <strong>fit_bmer_build</strong>, we can use <strong>par_names</strong>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">allnames &lt;-<span class="st"> </span><span class="kw">par_names</span>(ehtp_build)
+<span class="kw">names</span>(allnames)
+<span class="co">#&gt; [1] &quot;beta&quot;              &quot;gamma_transcriber&quot; &quot;sigma_transcriber&quot; &quot;omega_transcriber&quot; &quot;gamma_target_word&quot; &quot;sigma_target_word&quot; &quot;omega_target_word&quot; &quot;y_hat&quot;             &quot;log_lik&quot;</span>
+allnames[[<span class="st">&quot;gamma_transcriber&quot;</span>]]
+<span class="co">#&gt; $Member</span>
+<span class="co">#&gt;  [1] &quot;A01&quot; &quot;A02&quot; &quot;A03&quot; &quot;A04&quot; &quot;A05&quot; &quot;A06&quot; &quot;A07&quot; &quot;A08&quot; &quot;A09&quot; &quot;A10&quot; &quot;B01&quot; &quot;B02&quot; &quot;B03&quot; &quot;B04&quot; &quot;B05&quot; &quot;B06&quot; &quot;B07&quot; &quot;B08&quot; &quot;B09&quot; &quot;B10&quot; &quot;C01&quot; &quot;C02&quot; &quot;C03&quot; &quot;C04&quot; &quot;C05&quot; &quot;C06&quot; &quot;C07&quot; &quot;C08&quot; &quot;C09&quot; &quot;C10&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Effect</span>
+<span class="co">#&gt; [1] &quot;(Intercept)&quot;             &quot;accent_patternEarlyHigh&quot; &quot;accent_patternPrimary&quot;</span>
+allnames[[<span class="st">&quot;omega_transcriber&quot;</span>]]
+<span class="co">#&gt; $Effect1</span>
+<span class="co">#&gt; [1] &quot;(Intercept)&quot;             &quot;accent_patternEarlyHigh&quot; &quot;accent_patternPrimary&quot;  </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Effect2</span>
+<span class="co">#&gt; [1] &quot;(Intercept)&quot;             &quot;accent_patternEarlyHigh&quot; &quot;accent_patternPrimary&quot;</span></code></pre></div>
+<p>As can be seen, the names in the <em>Stan</em> code above are renamed to be more transparent (i.e. “gamma_1” will not be a parameter in the final model, but rather “gamma_transcriber”). The <strong>par_names</strong> function returns a named list where each element is a parameter in the model. Each element is in turn comprised of a list giving the names of the dimensions of the parameter. The parameters are named in the following way:</p>
+<ul>
+<li><em>beta</em> is the fixed effect coefficients</li>
+<li><em>gamma</em> is the random effect coefficients for a random effect group</li>
+<li><em>sigma</em> is the standard deviations for the random effects for a random efffect group</li>
+<li><em>omega</em> is the correlation matrix for the random effects for a random effect group</li>
+<li><em>y_hat</em> is the predicted values for the observations</li>
+<li><em>log_lik</em> is the log-likelihood for the observations</li>
+</ul>
+<p>Named lists in <em>bmers</em> can always be explored using the double-square-bracket notation, but the dollar-sign notation will only work if the names of the random and fixed effects follow certain naming conventions. For this reason, I will consistently use the double-square-bracket notation when there is a possibility that the dollar-sign notation would fail for some models. That is:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># This will always work</span>
+allnames[[<span class="st">&quot;gamma_transcriber&quot;</span>]]
+
+<span class="co"># This will only work sometimes</span>
+allnames$gamma_transcriber</code></pre></div>
+<p>This <strong>bmerBuild</strong> can be used to fit a Bayesian mixed effects regression in <em>Stan</em> by passing it to <strong>fit_bmer_build</strong>.</p>
+</div>
+<div id="fit_bmer_build" class="section level2">
+<h2>fit_bmer_build</h2>
+<p>We pass the <strong>bmerBuild</strong> we just created to <strong>fit_bmer_build</strong>, where we can additionally specify arguments for the <strong>sampling</strong> function in the <em>rstan</em> package. Two of these arguments are specified differently in <em>bmers</em> than they would be in <em>rstan</em>: <em>adapt_delta</em> and <em>max_treedepth</em>. In <em>rstan</em>, the call would look like:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># arguments specified in 'control' for rstan</span>
+<span class="kw">sampling</span>(<span class="dt">object =</span> myStanModel, <span class="dt">data =</span> listOfData,
+    <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">adapt_delta =</span> <span class="fl">0.8</span>, <span class="dt">max_treedepth =</span> <span class="dv">10</span>))</code></pre></div>
+<p>These arguments are <strong>NOT</strong> specified in <em>control</em> for <strong>fit_bmer_build</strong>. They are specified as their own parameters:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># arguments specified on their own for bmers</span>
+<span class="kw">fit_bmer_build</span>(myBuild, <span class="dt">adapt_delta =</span> <span class="fl">0.8</span>, <span class="dt">max_treedepth =</span> <span class="dv">10</span>)</code></pre></div>
+<p>If the first call to fit_bmer_build with the default values for <em>adapt_delta</em> and <em>max_treedepth</em> above returns a warning message, you may need to refit the model. If there is a warning about divergent transitions, <em>adapt_delta</em> should be increased (try 0.99). If there is a warning about the maximum treedepth, <em>max_treedepth</em> should be increased (try 15). The divergent transition warning message should not be ignored (it indicates the results should not be used). The maximum treedepth warning is not as dire. See <a href="http://http://mc-stan.org/misc/warnings.html" class="uri">http://http://mc-stan.org/misc/warnings.html</a>. No other parameters can currently be passed to the <em>control</em> parameter for <strong>rstan::sampling</strong>. Some other <strong>rstan::sampling</strong> arguments can be optionally passed to <strong>fit_bmer_build</strong>, though most should likely not be used. The most important ones to understand (and whose alteration from default values has been tested in <em>bmers</em>) are listed here with their default values in <em>rstan</em>:</p>
+<ul>
+<li>chains = 4</li>
+<li>iter = 2000</li>
+<li>warmup = floor(iter/2)</li>
+<li>thin = 1</li>
+<li>cores = getOption(“mc.cores”, 1L)</li>
+<li>open_progress = interactive() &amp;&amp; !isatty(stdout()) &amp;&amp; !identical(Sys.getenv(“RSTUDIO”),“1”)</li>
+</ul>
+<p>The <em>chains</em> argument determines how many Markov chains should be run. The <em>iter</em> argument determines how many total iterations there are in each chain. The <em>warmup</em> argument determines how many of these iterations in each chain are used to optimize the stepsize (and are discarded when computing posterior estiamtes); the default is for the first half of the iterations to be warmup. The <em>thin</em> argument determines the period for keeping samples; when it is set to 1 (recommended), then all post-warmup iterations are kept. If, for example, you set it to 3, then every third post-warmup iteration would be kept. The <em>cores</em> argument allows the chains to be run in parallel. For example, “chains = 4, cores = 4” would allow you to run all four chains at once, provided you have 4 threads in your CPU (the number of threads you have is equal to the number of cores in your processor x2 if your CPU has hyperthreading and equal to the number of cores if it does not have hyperthreading; if you run a parallelized model which takes up all of the threads on your computer, e.g. “chains = 4, cores = 4” on a dual-core CPU with hyperthreading, be aware that this will likely make your computer unusable for other tasks while the model is running, and it would probably be better to specify something like “chains = 4, cores = 2”). The default for <em>cores</em> is to check the global option, which by default is 1, and which can be set as mentioned above to default to maximum parallelization by calling:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">options</span>(<span class="dt">mc.cores =</span> parallel::<span class="kw">detectCores</span>())</code></pre></div>
+<p>If you want to set the default to a number between 1 and the number of threads you have (say, 2), then you can alter the call accordingly, and not have to specify cores for the remainder of the R session:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">options</span>(<span class="dt">mc.cores =</span> <span class="dv">2</span>)</code></pre></div>
+<p>If you specify a number for <em>cores</em> within the call to <strong>fit_bmer_build</strong> then the global option is ignored. The final argument, <em>open_progress</em>, indicates whether a browser window should be opened in the case of parallel chains. If you are using RStudio, then specifying this argument will cause an error; the default in RStudio is for the viewing pane to show the progress of the parallel chains. If you are not using RStudio and are running parallel chains, I would recommend setting <em>open_progress</em> to TRUE. If parallelization is not utilized (i.e. <em>cores = 1</em>), then the progress for the chains will be printed out in the console window.</p>
+<p>For our example, then, we can simply call the following:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ehtp_fit &lt;-<span class="st"> </span><span class="kw">fit_bmer_build</span>(ehtp_build)</code></pre></div>
+<p>This defaults to running 4 chains with 2000 iterations, 1000 of which are warmup, makin the total number of posterior samples for the model 4 * (2000 - 1000) = 4000. If this is the first time a regression of similar structure has been run, then <em>rstan</em> will need to first compile a <strong>stanmodel</strong> object prior to running the Markov chains. Depending on the speed of your computer, this can take several minutes. For this reason, <em>bmers</em> saves <strong>stanmodel</strong> objects once they have been compiled. In the future (even if in a different R session), regressions with a similar structure will not require compilation. “Similar structure” here means that the scale of the fixed effects is treated in the same way, whether or not the degrees of freedom for the beta prior is equal to 1 is the same, the number of random effects groups with intercepts only is the same, the number of random effects groups with intercepts and slopes is the same, and the regression family (gaussian vs binomial) is the same. For most users, a small subset of the possible types of models will likely be used, and so after a little time using the package, you will rarely need to wait for compilation anymore. If you see warnings during compilation that start with “In file included from” and mention “RVALUE_REFERENCES”, these can be ignored (<a href="https://github.com/stan-dev/rstan/issues/372" class="uri">https://github.com/stan-dev/rstan/issues/372</a>).</p>
+<p>Once the Markov chains have been simulated, the <strong>fit_bmer_build</strong> function will return a <strong>bmerFit</strong> object. An easy-to-view form of the summary can be seen by simply calling the object:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ehtp_fit
+<span class="co">#&gt; bmerFit for model 'Early High Target RPT'</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; fit_bmer_build(build = ehtp_build)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Family: binomial</span>
+<span class="co">#&gt; Response: marked_prominent</span>
+<span class="co">#&gt; Observations: 900</span>
+<span class="co">#&gt; Parameters (fixed and random): 195</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Random Effects:</span>
+<span class="co">#&gt;  Groups           Effect                  SD      Corr      </span>
+<span class="co">#&gt;  transcriber (30) (Intercept)             1.2599            </span>
+<span class="co">#&gt;                   accent_patternEarlyHigh 0.9692  0.05      </span>
+<span class="co">#&gt;                   accent_patternPrimary   1.0493  0.04  0.23</span>
+<span class="co">#&gt;  target_word (30) (Intercept)             1.0154            </span>
+<span class="co">#&gt;                   accent_patternEarlyHigh 0.4286  0.25      </span>
+<span class="co">#&gt;                   accent_patternPrimary   1.0372  0.26  0.22</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Fixed Effects:</span>
+<span class="co">#&gt;  Effect                   Mean   SD      2.5%   97.5%  Neff   Rhat   P(&gt;0)   </span>
+<span class="co">#&gt;  (Intercept)             -0.2460 0.3426 -0.9395 0.4335 2127.6 1.0019   0.2300</span>
+<span class="co">#&gt;  accent_patternEarlyHigh  1.1087 0.2959  0.5479 1.7415 2419.5 1.0012 &gt; 0.9999</span>
+<span class="co">#&gt;  accent_patternPrimary    2.2495 0.3681  1.5814 3.0156 4000.0 1.0002 &gt; 0.9999</span></code></pre></div>
+<p>The first portion is similar to the printing for a <strong>bmerBuild</strong>. The random effects section gives the estimates for the posterior means of the standard deviations and the lower triangle of the correlation matrices by random effects group. The fixed effects section gives the posterior mean, standard deviation, 95% credible interval, effective sample size, and Gelman-Rubin Rhat statistic for each fixed effect coefficient, along with the posterior probability that each coefficient is greater than zero. It should be noted that this probability is not the same as a p-value; the values represent the posterior probability that the coefficient is positive. A very high value for the posterior probability indicates greater certainty for a postivie effect and a very low value indicates greater certainty for a negative effect, with moderate values indicating less certainty for the effect being either positive or negative. For effective sample sizes, higher is better (the maximum value is the total number of posterior samples: chains * (iter - warmup)); if the value is under 100 for any parameter in the model, a warning is given. Rhat measures whether or not the chains have converged to the (same) stationary distribution and should be under 1.1 for all parameters (if its not, a warning is given).</p>
+<p>A list-summary of the model can be obtained with <strong>fit_summary</strong>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ehtp_fit_summ &lt;-<span class="st"> </span><span class="kw">fit_summary</span>(ehtp_fit)
+<span class="kw">names</span>(ehtp_fit_summ)
+<span class="co">#&gt; [1] &quot;call&quot;          &quot;build&quot;         &quot;random&quot;        &quot;fixed&quot;         &quot;fitted.values&quot; &quot;warnings&quot;</span></code></pre></div>
+<p>The <em>build</em> element of the list is the same object obtained by using <strong>build_summary</strong> on the <strong>bmerBuild</strong>. The <em>random</em> element is a named list with an element for each random effects group, which contains the posterior mean for each parameter related to the random effect group, as well as some additional quantities generated from the posterior samples, but not present in <strong>par_names</strong> (such as the covariance matrix):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(ehtp_fit_summ$random)
+<span class="co">#&gt; [1] &quot;transcriber&quot; &quot;target_word&quot;</span>
+<span class="kw">names</span>(ehtp_fit_summ$random[[<span class="st">&quot;transcriber&quot;</span>]])
+<span class="co">#&gt; [1] &quot;ranef&quot; &quot;coef&quot;  &quot;sd&quot;    &quot;cor&quot;   &quot;cov&quot;</span>
+ehtp_fit_summ$random[[<span class="st">&quot;transcriber&quot;</span>]]
+<span class="co">#&gt; $ranef</span>
+<span class="co">#&gt;     (Intercept) accent_patternEarlyHigh accent_patternPrimary</span>
+<span class="co">#&gt; A01   0.8497494              1.30958110            0.46435547</span>
+<span class="co">#&gt; A02   0.2767579              0.27601052            1.07531266</span>
+<span class="co">#&gt; A03  -2.2514703             -0.58304647           -0.30712668</span>
+<span class="co">#&gt; A04   1.3793545             -0.72403900           -0.03807484</span>
+<span class="co">#&gt; A05  -0.7118703              0.65014681           -0.31631102</span>
+<span class="co">#&gt; A06  -1.8152719             -0.38749960           -0.18492639</span>
+<span class="co">#&gt; A07  -0.7254273              0.34323335            0.01966484</span>
+<span class="co">#&gt; A08   0.2870529              0.27291052            1.05638555</span>
+<span class="co">#&gt; A09  -0.5298661              0.57122862           -0.04196623</span>
+<span class="co">#&gt; A10   1.5579318             -0.90844097           -0.24199316</span>
+<span class="co">#&gt; B01  -0.7321661             -0.39681887            1.00439398</span>
+<span class="co">#&gt; B02   0.1367289             -0.06277012           -0.99232625</span>
+<span class="co">#&gt; B03   0.2524937              0.63372879            0.78406652</span>
+<span class="co">#&gt; B04  -0.2377853              0.49750211            0.43113158</span>
+<span class="co">#&gt; B05   1.3708760              0.80211976            0.17319055</span>
+<span class="co">#&gt; B06  -0.5321506             -0.19878407            0.93750552</span>
+<span class="co">#&gt; B07   0.2188578              0.35073808           -0.45755917</span>
+<span class="co">#&gt; B08   0.6738190             -0.97390928           -0.16552127</span>
+<span class="co">#&gt; B09  -0.2982941             -1.50790146           -1.11230120</span>
+<span class="co">#&gt; B10  -0.4780835             -0.84236514           -1.97717893</span>
+<span class="co">#&gt; C01  -0.6855064             -0.09573663            0.52758965</span>
+<span class="co">#&gt; C02   1.2671887              1.09160883            1.09702763</span>
+<span class="co">#&gt; C03   0.7226982              0.13459907           -0.87673423</span>
+<span class="co">#&gt; C04   0.7866187              1.13780733            0.56004908</span>
+<span class="co">#&gt; C05   0.9479760             -0.42047840           -0.73262103</span>
+<span class="co">#&gt; C06  -0.4698228             -0.20331031            0.86294153</span>
+<span class="co">#&gt; C07   2.0985241              0.34281725            0.23835271</span>
+<span class="co">#&gt; C08  -0.6967610             -0.92557579           -0.17498923</span>
+<span class="co">#&gt; C09  -1.6034015              0.01710324           -0.43961923</span>
+<span class="co">#&gt; C10  -1.0661897              0.34350678           -0.35934078</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $coef</span>
+<span class="co">#&gt;      (Intercept) accent_patternEarlyHigh accent_patternPrimary</span>
+<span class="co">#&gt; A01  0.603779353               2.4182413             2.7138779</span>
+<span class="co">#&gt; A02  0.030787834               1.3846707             3.3248351</span>
+<span class="co">#&gt; A03 -2.497440307               0.5256137             1.9423957</span>
+<span class="co">#&gt; A04  1.133384426               0.3846212             2.2114476</span>
+<span class="co">#&gt; A05 -0.957840370               1.7588070             1.9332114</span>
+<span class="co">#&gt; A06 -2.061241931               0.7211606             2.0645960</span>
+<span class="co">#&gt; A07 -0.971397385               1.4518936             2.2691872</span>
+<span class="co">#&gt; A08  0.041082835               1.3815707             3.3059079</span>
+<span class="co">#&gt; A09 -0.775836119               1.6798888             2.2075562</span>
+<span class="co">#&gt; A10  1.311961741               0.2002192             2.0075292</span>
+<span class="co">#&gt; B01 -0.978136196               0.7118413             3.2539164</span>
+<span class="co">#&gt; B02 -0.109241129               1.0458901             1.2571961</span>
+<span class="co">#&gt; B03  0.006523658               1.7423890             3.0335889</span>
+<span class="co">#&gt; B04 -0.483755362               1.6061623             2.6806540</span>
+<span class="co">#&gt; B05  1.124905976               1.9107800             2.4227129</span>
+<span class="co">#&gt; B06 -0.778120665               0.9098761             3.1870279</span>
+<span class="co">#&gt; B07 -0.027112246               1.4593983             1.7919632</span>
+<span class="co">#&gt; B08  0.427848933               0.1347509             2.0840011</span>
+<span class="co">#&gt; B09 -0.544264113              -0.3992412             1.1372212</span>
+<span class="co">#&gt; B10 -0.724053519               0.2662951             0.2723435</span>
+<span class="co">#&gt; C01 -0.931476448               1.0129236             2.7771120</span>
+<span class="co">#&gt; C02  1.021218639               2.2002690             3.3465500</span>
+<span class="co">#&gt; C03  0.476728150               1.2432593             1.3727882</span>
+<span class="co">#&gt; C04  0.540648668               2.2464675             2.8095715</span>
+<span class="co">#&gt; C05  0.702005941               0.6881818             1.5169014</span>
+<span class="co">#&gt; C06 -0.715792870               0.9053499             3.1124639</span>
+<span class="co">#&gt; C07  1.852554024               1.4514775             2.4878751</span>
+<span class="co">#&gt; C08 -0.942731068               0.1830844             2.0745332</span>
+<span class="co">#&gt; C09 -1.849371597               1.1257635             1.8099032</span>
+<span class="co">#&gt; C10 -1.312159719               1.4521670             1.8901816</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $sd</span>
+<span class="co">#&gt;             (Intercept) accent_patternEarlyHigh   accent_patternPrimary </span>
+<span class="co">#&gt;                1.259878                0.969204                1.049337 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $cor</span>
+<span class="co">#&gt;                         (Intercept) accent_patternEarlyHigh accent_patternPrimary</span>
+<span class="co">#&gt; (Intercept)              1.00000000              0.05139183            0.03542973</span>
+<span class="co">#&gt; accent_patternEarlyHigh  0.05139183              1.00000000            0.22700736</span>
+<span class="co">#&gt; accent_patternPrimary    0.03542973              0.22700736            1.00000000</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $cov</span>
+<span class="co">#&gt;                         (Intercept) accent_patternEarlyHigh accent_patternPrimary</span>
+<span class="co">#&gt; (Intercept)              1.58729313              0.06275348            0.04683942</span>
+<span class="co">#&gt; accent_patternEarlyHigh  0.06275348              0.93935643            0.23087142</span>
+<span class="co">#&gt; accent_patternPrimary    0.04683942              0.23087142            1.10110841</span></code></pre></div>
+<p>Here, <em>ranef</em> contains the random intercept and slope estimates for each member (i.e. the estimates which are multinormally distributed with mean zero), <em>coef</em> contains the coefficient vector for each member (the random effects for each member added to the fixed effects), <em>sd</em> has the standard deviations in the random effects, <em>cor</em> has the correlation matrix, and <em>cov</em> has the covariance matrix.</p>
+<p>The <em>fixed</em> element has similar elements:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ehtp_fit_summ$fixed
+<span class="co">#&gt; $coef</span>
+<span class="co">#&gt;                               mean     se_mean        sd       2.5%    97.5%    n_eff     Rhat P(&gt;0)</span>
+<span class="co">#&gt; (Intercept)             -0.2459701 0.007426703 0.3425600 -0.9395134 0.433464 2127.557 1.001947  0.23</span>
+<span class="co">#&gt; accent_patternEarlyHigh  1.1086602 0.006015288 0.2958799  0.5478626 1.741500 2419.459 1.001250  1.00</span>
+<span class="co">#&gt; accent_patternPrimary    2.2495224 0.005820074 0.3680938  1.5813799 3.015600 4000.000 1.000157  1.00</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $cor</span>
+<span class="co">#&gt;                         (Intercept) accent_patternEarlyHigh accent_patternPrimary</span>
+<span class="co">#&gt; (Intercept)              1.00000000              -0.2054159           -0.01553889</span>
+<span class="co">#&gt; accent_patternEarlyHigh -0.20541587               1.0000000            0.16995430</span>
+<span class="co">#&gt; accent_patternPrimary   -0.01553889               0.1699543            1.00000000</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $cov</span>
+<span class="co">#&gt;                          (Intercept) accent_patternEarlyHigh accent_patternPrimary</span>
+<span class="co">#&gt; (Intercept)              0.117347344             -0.02082026          -0.001959363</span>
+<span class="co">#&gt; accent_patternEarlyHigh -0.020820260              0.08754494           0.018509988</span>
+<span class="co">#&gt; accent_patternPrimary   -0.001959363              0.01850999           0.135493026</span></code></pre></div>
+<p>The <em>fitted.values</em> are the model predictions for each observation (predicted response for Gaussian models and predicted log-odds of being 1 for binomial models). The <em>warnings</em> element has the warnings returned by <strong>fit_bmer_build</strong> (if any).</p>
+<p>All of the same query functions which can be used on a <strong>bmerBuild</strong> can also be used on a <strong>bmerFit</strong>. Additinally, the function <strong>get_build</strong> returns the <strong>bmerBuild</strong> stored in a <strong>bmerFit</strong>, the function <strong>named_extract</strong> extracts posterior samples using <strong>rstan::extract</strong> and then applies the names from <strong>par_names</strong> to the second dimension onward (the first dimension is the iteration number), and the function <strong>all_comparisons</strong> returns a list of the effect estimates computed from the fixed effects coefficients (most useful for pairwise group comparisons for a factor and interactions involving at least one unordered factor).</p>
+<p>In our case, we can call:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">transcriber_samples &lt;-<span class="st"> </span><span class="kw">named_extract</span>(ehtp_fit,
+    <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;gamma_transcriber&quot;</span>, <span class="st">&quot;sigma_transcriber&quot;</span>, <span class="st">&quot;omega_transcriber&quot;</span>))
+
+<span class="kw">names</span>(transcriber_samples)
+<span class="co">#&gt; [1] &quot;gamma_transcriber&quot; &quot;sigma_transcriber&quot; &quot;omega_transcriber&quot;</span>
+
+<span class="kw">dim</span>(transcriber_samples[[<span class="st">&quot;gamma_transcriber&quot;</span>]])
+<span class="co">#&gt; [1] 4000   30    3</span>
+
+<span class="kw">dimnames</span>(transcriber_samples[[<span class="st">&quot;gamma_transcriber&quot;</span>]])
+<span class="co">#&gt; $iterations</span>
+<span class="co">#&gt; NULL</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[2]]</span>
+<span class="co">#&gt;  [1] &quot;A01&quot; &quot;A02&quot; &quot;A03&quot; &quot;A04&quot; &quot;A05&quot; &quot;A06&quot; &quot;A07&quot; &quot;A08&quot; &quot;A09&quot; &quot;A10&quot; &quot;B01&quot; &quot;B02&quot; &quot;B03&quot; &quot;B04&quot; &quot;B05&quot; &quot;B06&quot; &quot;B07&quot; &quot;B08&quot; &quot;B09&quot; &quot;B10&quot; &quot;C01&quot; &quot;C02&quot; &quot;C03&quot; &quot;C04&quot; &quot;C05&quot; &quot;C06&quot; &quot;C07&quot; &quot;C08&quot; &quot;C09&quot; &quot;C10&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[3]]</span>
+<span class="co">#&gt; [1] &quot;(Intercept)&quot;             &quot;accent_patternEarlyHigh&quot; &quot;accent_patternPrimary&quot;</span></code></pre></div>
+<p>The samples for <em>gamma_transcriber</em> have three dimensions: the first is iteration number (of which there are 4000: chains = 4, iter = 2000, warmup = 1000 –&gt; 4 * (2000 - 1000) samples), the second is group member (i.e. transcriber ID), and the third is effect. So when we execute the following we get the random effects estimates from a single iteration:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">transcriber_samples[[<span class="st">&quot;gamma_transcriber&quot;</span>]][<span class="dv">1</span>,,]
+<span class="co">#&gt;      </span>
+<span class="co">#&gt;       (Intercept) accent_patternEarlyHigh accent_patternPrimary</span>
+<span class="co">#&gt;   A01  -0.2551358               2.2320712           0.171449441</span>
+<span class="co">#&gt;   A02   0.9365760               0.1206065           0.517072225</span>
+<span class="co">#&gt;   A03  -2.4099219               0.4026932          -0.033160699</span>
+<span class="co">#&gt;   A04   0.6462799              -1.7060204          -0.754035779</span>
+<span class="co">#&gt;   A05  -0.6235240               0.4209900           0.119868848</span>
+<span class="co">#&gt;   A06  -2.4070336              -0.8830033          -0.566596501</span>
+<span class="co">#&gt;   A07  -0.7088012               0.4785913           0.260756691</span>
+<span class="co">#&gt;   A08  -0.1478268              -0.1506464           0.211433444</span>
+<span class="co">#&gt;   A09   0.3004875              -0.6331378          -0.179189787</span>
+<span class="co">#&gt;   A10   1.0667445               0.2231355           0.652469087</span>
+<span class="co">#&gt;   B01  -0.9945917              -0.1822506           1.004894657</span>
+<span class="co">#&gt;   B02   0.2515310              -0.3462967          -0.542387386</span>
+<span class="co">#&gt;   B03  -0.1051008               1.8371229           1.140786486</span>
+<span class="co">#&gt;   B04  -0.3339287               0.9970484           0.609783304</span>
+<span class="co">#&gt;   B05   0.6264014               0.8322909           0.988760655</span>
+<span class="co">#&gt;   B06  -0.3659784              -0.9483707           1.038823311</span>
+<span class="co">#&gt;   B07   0.3982836              -1.1595745          -0.815756981</span>
+<span class="co">#&gt;   B08   0.2088698              -1.0597496           0.076172590</span>
+<span class="co">#&gt;   B09  -0.4037663              -1.1011864          -0.838380533</span>
+<span class="co">#&gt;   B10  -0.5200646              -1.1761834          -1.583744162</span>
+<span class="co">#&gt;   C01  -0.9549692              -0.1552084          -0.070352465</span>
+<span class="co">#&gt;   C02   1.1000014               1.0574675           0.886520434</span>
+<span class="co">#&gt;   C03   0.8221624              -1.1206492           0.002265962</span>
+<span class="co">#&gt;   C04   0.7530679               1.5407813           1.073045388</span>
+<span class="co">#&gt;   C05   1.7003840              -0.3558463          -1.448700150</span>
+<span class="co">#&gt;   C06  -0.4733329              -0.4391943          -0.262601799</span>
+<span class="co">#&gt;   C07   3.1308258              -0.3245160           0.395690473</span>
+<span class="co">#&gt;   C08  -0.8411823              -0.4414068          -0.875751864</span>
+<span class="co">#&gt;   C09  -0.3083425              -0.8591854          -0.771493641</span>
+<span class="co">#&gt;   C10  -1.6877660              -0.1080435           0.543422920</span></code></pre></div>
+<p>The estimates for <em>ranef</em> returned by the <strong>fit_summary</strong> are the average of this matrix over the 4000 iterations:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">apply</span>(transcriber_samples[[<span class="st">&quot;gamma_transcriber&quot;</span>]], <span class="dv">2</span>:<span class="dv">3</span>, mean)
+<span class="co">#&gt;      </span>
+<span class="co">#&gt;       (Intercept) accent_patternEarlyHigh accent_patternPrimary</span>
+<span class="co">#&gt;   A01   0.8497494              1.30958110            0.46435547</span>
+<span class="co">#&gt;   A02   0.2767579              0.27601052            1.07531266</span>
+<span class="co">#&gt;   A03  -2.2514703             -0.58304647           -0.30712668</span>
+<span class="co">#&gt;   A04   1.3793545             -0.72403900           -0.03807484</span>
+<span class="co">#&gt;   A05  -0.7118703              0.65014681           -0.31631102</span>
+<span class="co">#&gt;   A06  -1.8152719             -0.38749960           -0.18492639</span>
+<span class="co">#&gt;   A07  -0.7254273              0.34323335            0.01966484</span>
+<span class="co">#&gt;   A08   0.2870529              0.27291052            1.05638555</span>
+<span class="co">#&gt;   A09  -0.5298661              0.57122862           -0.04196623</span>
+<span class="co">#&gt;   A10   1.5579318             -0.90844097           -0.24199316</span>
+<span class="co">#&gt;   B01  -0.7321661             -0.39681887            1.00439398</span>
+<span class="co">#&gt;   B02   0.1367289             -0.06277012           -0.99232625</span>
+<span class="co">#&gt;   B03   0.2524937              0.63372879            0.78406652</span>
+<span class="co">#&gt;   B04  -0.2377853              0.49750211            0.43113158</span>
+<span class="co">#&gt;   B05   1.3708760              0.80211976            0.17319055</span>
+<span class="co">#&gt;   B06  -0.5321506             -0.19878407            0.93750552</span>
+<span class="co">#&gt;   B07   0.2188578              0.35073808           -0.45755917</span>
+<span class="co">#&gt;   B08   0.6738190             -0.97390928           -0.16552127</span>
+<span class="co">#&gt;   B09  -0.2982941             -1.50790146           -1.11230120</span>
+<span class="co">#&gt;   B10  -0.4780835             -0.84236514           -1.97717893</span>
+<span class="co">#&gt;   C01  -0.6855064             -0.09573663            0.52758965</span>
+<span class="co">#&gt;   C02   1.2671887              1.09160883            1.09702763</span>
+<span class="co">#&gt;   C03   0.7226982              0.13459907           -0.87673423</span>
+<span class="co">#&gt;   C04   0.7866187              1.13780733            0.56004908</span>
+<span class="co">#&gt;   C05   0.9479760             -0.42047840           -0.73262103</span>
+<span class="co">#&gt;   C06  -0.4698228             -0.20331031            0.86294153</span>
+<span class="co">#&gt;   C07   2.0985241              0.34281725            0.23835271</span>
+<span class="co">#&gt;   C08  -0.6967610             -0.92557579           -0.17498923</span>
+<span class="co">#&gt;   C09  -1.6034015              0.01710324           -0.43961923</span>
+<span class="co">#&gt;   C10  -1.0661897              0.34350678           -0.35934078</span></code></pre></div>
+<p>This same principle applies to all parameters in the model (those in the list returned by <strong>par_names</strong>). The only predictor in this model is a three-level factor, so in this case, <strong>all_comparisons</strong> returns the estimate for each level along with pairwise comparisons:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">comps &lt;-<span class="st"> </span><span class="kw">all_comparisons</span>(ehtp_fit)
+
+<span class="kw">names</span>(comps)
+<span class="co">#&gt; [1] &quot;accent_pattern&quot;</span>
+
+comps[[<span class="st">&quot;accent_pattern&quot;</span>]]
+<span class="co">#&gt; $estimates</span>
+<span class="co">#&gt;   accent_pattern       Mean        SD  P(&gt;0)       2.5%     97.5%</span>
+<span class="co">#&gt; 1      EarlyHigh  0.8626902 0.4040443 0.9875  0.1016935  1.681421</span>
+<span class="co">#&gt; 2        Primary  2.0035523 0.4989205 1.0000  1.0596477  3.061588</span>
+<span class="co">#&gt; 3     Unaccented -3.6041527 0.6503572 0.0000 -4.9494743 -2.459127</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $contrasts</span>
+<span class="co">#&gt;                                             Contrast      Mean        SD P(&gt;0)      2.5%     97.5%</span>
+<span class="co">#&gt; 1    accent_patternEarlyHigh - accent_patternPrimary -1.140862 0.4312980 0.003 -2.046938 -0.328427</span>
+<span class="co">#&gt; 2 accent_patternEarlyHigh - accent_patternUnaccented  4.466843 0.7481395 1.000  3.144132  6.058274</span>
+<span class="co">#&gt; 3   accent_patternPrimary - accent_patternUnaccented  5.607705 0.8387830 1.000  4.095125  7.328385</span></code></pre></div>
+<p>In regressions with more terms (including interactions), an entry for each term will be returned. In our case, we can see that the interpretation of the results is that both “EarlyHigh” and “Primary” are <em>much</em> more likely to be marked as prominent than “Unstressed” (log-odds differences of 4.47 and 5.61, respectively). However, rather than “EarlyHigh” being more likely to be marked than “Primary” as hypothesized, the data show the opposite, and the posterior probability that “Primary” is more likely to be marked than “EarlyHigh” is 100 * (1 - 0.003) = 99.7% (these results are the same as obtained with Poisson regressions in Cole et al. 2015; see <em>References</em> below for a link to the paper with discussion of the results).</p>
+<p>The <strong>bmerFit</strong> class inherits from the <strong>stanfit</strong> class, and so (most) functions from <em>rstan</em> which can be used on a <strong>stanfit</strong> can be used on a <strong>bmerFit</strong> (e.g. <strong>summary</strong>, <strong>traceplot</strong>, etc.). In the case of <strong>summary</strong>, an additional <em>bmers</em> query function <strong>bmers_summary</strong> has been included, which has default quantiles of 0.025 and 0.975 (i.e. 95% credible interval), and also computes the posterior probability that each parameter listed is in a specified interval, with the default interval being (0, Inf), which indicates computation of the posterior probability that the parameters are positive (useful in most cases but not for all, e.g. when examining bounded parameters such as variance components or when you want to know the proportion of the posterior samples which fall in a region of practical equivalence). The <strong>bmers_summary</strong> function also removes redundant rows in the case of correlation matrices (i.e. it returns only the lower triangle):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(ehtp_fit, <span class="dt">pars =</span> <span class="st">&quot;omega_transcriber&quot;</span>)$summary
+<span class="co">#&gt;                                                                          mean      se_mean           sd       2.5%         25%        50%       75%     97.5%     n_eff      Rhat</span>
+<span class="co">#&gt; omega_transcriber[(Intercept),(Intercept)]                         1.00000000 0.000000e+00 0.000000e+00  1.0000000  1.00000000 1.00000000 1.0000000 1.0000000 4000.0000       NaN</span>
+<span class="co">#&gt; omega_transcriber[accent_patternEarlyHigh,(Intercept)]             0.05139183 5.099306e-03 2.755182e-01 -0.4751953 -0.14470394 0.04840246 0.2429726 0.5873155 2919.2986 0.9998735</span>
+<span class="co">#&gt; omega_transcriber[accent_patternPrimary,(Intercept)]               0.03542973 5.102963e-03 2.637121e-01 -0.4636283 -0.15872745 0.03049896 0.2246537 0.5489004 2670.6387 0.9999984</span>
+<span class="co">#&gt; omega_transcriber[(Intercept),accent_patternEarlyHigh]             0.05139183 5.099306e-03 2.755182e-01 -0.4751953 -0.14470394 0.04840246 0.2429726 0.5873155 2919.2986 0.9998735</span>
+<span class="co">#&gt; omega_transcriber[accent_patternEarlyHigh,accent_patternEarlyHigh] 1.00000000 1.426826e-18 9.024038e-17  1.0000000  1.00000000 1.00000000 1.0000000 1.0000000 4000.0000 0.9989995</span>
+<span class="co">#&gt; omega_transcriber[accent_patternPrimary,accent_patternEarlyHigh]   0.22700736 5.749826e-03 2.661075e-01 -0.2952211  0.04480191 0.23916703 0.4156037 0.7110687 2141.9275 1.0010902</span>
+<span class="co">#&gt; omega_transcriber[(Intercept),accent_patternPrimary]               0.03542973 5.102963e-03 2.637121e-01 -0.4636283 -0.15872745 0.03049896 0.2246537 0.5489004 2670.6387 0.9999984</span>
+<span class="co">#&gt; omega_transcriber[accent_patternEarlyHigh,accent_patternPrimary]   0.22700736 5.749826e-03 2.661075e-01 -0.2952211  0.04480191 0.23916703 0.4156037 0.7110687 2141.9275 1.0010902</span>
+<span class="co">#&gt; omega_transcriber[accent_patternPrimary,accent_patternPrimary]     1.00000000 6.259517e-18 7.015958e-17  1.0000000  1.00000000 1.00000000 1.0000000 1.0000000  125.6297 0.9989995</span>
+
+<span class="kw">bmers_summary</span>(ehtp_fit, <span class="dt">pars =</span> <span class="st">&quot;omega_transcriber&quot;</span>)
+<span class="co">#&gt;                                                                        mean     se_mean        sd       2.5%     97.5%    n_eff      Rhat   P(&gt;0)</span>
+<span class="co">#&gt; omega_transcriber[accent_patternEarlyHigh,(Intercept)]           0.05139183 0.005099306 0.2755182 -0.4751953 0.5873155 2919.299 0.9998735 0.57350</span>
+<span class="co">#&gt; omega_transcriber[accent_patternPrimary,(Intercept)]             0.03542973 0.005102963 0.2637121 -0.4636283 0.5489004 2670.639 0.9999984 0.54300</span>
+<span class="co">#&gt; omega_transcriber[accent_patternPrimary,accent_patternEarlyHigh] 0.22700736 0.005749826 0.2661075 -0.2952211 0.7110687 2141.927 1.0010902 0.79625</span>
+
+<span class="kw">bmers_summary</span>(ehtp_fit, <span class="dt">pars =</span> <span class="st">&quot;sigma_transcriber&quot;</span>,
+    <span class="dt">interval =</span> <span class="kw">c</span>(<span class="fl">0.5</span>, <span class="ot">Inf</span>))
+<span class="co">#&gt;                                                mean     se_mean        sd      2.5%    97.5%    n_eff     Rhat P(&gt;0.5)</span>
+<span class="co">#&gt; sigma_transcriber[(Intercept)]             1.259878 0.005620498 0.2521122 0.8334918 1.830002 2012.048 1.001624 1.00000</span>
+<span class="co">#&gt; sigma_transcriber[accent_patternEarlyHigh] 0.969204 0.005991502 0.2625325 0.5054590 1.535978 1919.971 1.001147 0.97600</span>
+<span class="co">#&gt; sigma_transcriber[accent_patternPrimary]   1.049337 0.006399136 0.2794505 0.5567490 1.664889 1907.072 1.000573 0.98775</span>
+
+<span class="kw">bmers_summary</span>(ehtp_fit, <span class="dt">pars =</span> <span class="st">&quot;sigma_transcriber&quot;</span>,
+    <span class="dt">interval =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.1</span>))
+<span class="co">#&gt;                                                mean     se_mean        sd      2.5%    97.5%    n_eff     Rhat P(on (0,0.1))</span>
+<span class="co">#&gt; sigma_transcriber[(Intercept)]             1.259878 0.005620498 0.2521122 0.8334918 1.830002 2012.048 1.001624             0</span>
+<span class="co">#&gt; sigma_transcriber[accent_patternEarlyHigh] 0.969204 0.005991502 0.2625325 0.5054590 1.535978 1919.971 1.001147             0</span>
+<span class="co">#&gt; sigma_transcriber[accent_patternPrimary]   1.049337 0.006399136 0.2794505 0.5567490 1.664889 1907.072 1.000573             0</span></code></pre></div>
+</div>
+<div id="bmer" class="section level2">
+<h2>bmer</h2>
+<p>As mentioned above, the <strong>build_bmer_model</strong> and <strong>fit_bmer_build</strong> functions are modular functions. They are combined in the function <strong>bmer</strong>, which takes all the arguments for <strong>build_bmer_model</strong> and all the arguments except <em>build</em> for <strong>fit_bmer_build</strong>. In this case, we could have obtained the <strong>bmerFit</strong> directly with:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ehtp_fit &lt;-<span class="st"> </span><span class="kw">bmer</span>(marked_prominent ~<span class="st"> </span>accent_pattern |<span class="st"> </span>transcriber +<span class="st"> </span>target_word,
+    <span class="dt">data =</span> ehtp, <span class="dt">family =</span> binomial, <span class="dt">model_name =</span> <span class="st">&quot;Early High Target RPT&quot;</span>)</code></pre></div>
+<p>We could also have the <strong>bmerBuild</strong> summary printed automatically before <strong>rstan::sampling</strong> is called, and the <strong>bmerFit</strong> summary printed automatically after <strong>rstan::sampling</strong> is called by setting the <em>verbose</em> parameter to TRUE in <strong>bmer_control</strong>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ehtp_fit &lt;-<span class="st"> </span><span class="kw">bmer</span>(marked_prominent ~<span class="st"> </span>accent_pattern |<span class="st"> </span>transcriber +<span class="st"> </span>target_word,
+    <span class="dt">data =</span> ehtp, <span class="dt">family =</span> binomial, <span class="dt">model_name =</span> <span class="st">&quot;Early High Target RPT&quot;</span>,
+    <span class="dt">control =</span> <span class="kw">bmer_control</span>(<span class="dt">verbose =</span> <span class="ot">TRUE</span>))</code></pre></div>
+<p> </p>
+</div>
+</div>
+<div id="behavioral-task-example" class="section level1">
+<h1>Behavioral task example</h1>
+<p>To give an additional example from a model with more predictors which include interactions, consider the data from the behavioral task described in Shantz and Tanner (2017), for which Kimball et al. (2016) give a Bayesian analysis (see the <em>References</em> section below). First we take a look at the data and ensure that <em>Syllables</em> is coded as an ordered factor:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">behavioral$Syllables &lt;-<span class="st"> </span><span class="kw">factor</span>(behavioral$Syllables, <span class="dt">ordered =</span> <span class="ot">TRUE</span>)
+<span class="kw">head</span>(behavioral)
+<span class="co">#&gt;   Trial GoNoGo_Group HandDecision GoNoGoDecision Subject Accuracy Gender InitialSound SUBTLEX_LogFrequency Syllables   Item GoNoGo</span>
+<span class="co">#&gt; 1     1 Gender First    Phonology         Gender     201        1   masc            k                1.792         2 kaktus     Go</span>
+<span class="co">#&gt; 2     2 Gender First    Phonology         Gender     201        1   masc            b                2.053         2  besen     Go</span>
+<span class="co">#&gt; 3     3 Gender First    Phonology         Gender     201        1   neut            k                3.038         1  kleid  No Go</span>
+<span class="co">#&gt; 4     4 Gender First    Phonology         Gender     201        1   neut            b                3.486         1   buch  No Go</span>
+<span class="co">#&gt; 5     5 Gender First    Phonology         Gender     201        1   masc            b                2.911         1   berg     Go</span>
+<span class="co">#&gt; 6     6 Gender First    Phonology         Gender     201        1   neut            k                1.914         2  kamel  No Go</span></code></pre></div>
+<p>Now we run the model described for this data in Kimball et al. (2016), using <strong>bmer</strong>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">behavioral_fit &lt;-<span class="st"> </span><span class="kw">bmer</span>(Accuracy ~<span class="st"> </span>(Trial +<span class="st"> </span>GoNoGo) *<span class="st"> </span>GoNoGo_Group *<span class="st"> </span>HandDecision +
+<span class="st">    </span>Gender +<span class="st"> </span>InitialSound +<span class="st"> </span>SUBTLEX_LogFrequency +<span class="st"> </span>Syllables |<span class="st"> </span>Subject +<span class="st"> </span>Item,
+    <span class="dt">data =</span> behavioral, <span class="dt">family =</span> binomial, <span class="dt">model_name =</span> <span class="st">&quot;Behavioral Task&quot;</span>)</code></pre></div>
+<p>In this case, I got the following warning:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#&gt; WARNING: 20 divergent transitions post-warmup; try increasing adapt_delta</span></code></pre></div>
+<p>So, refitting with increaded <em>adapt_delta</em>, we obtain no warnings:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">behavioral_fit &lt;-<span class="st"> </span><span class="kw">bmer</span>(Accuracy ~<span class="st"> </span>(Trial +<span class="st"> </span>GoNoGo) *<span class="st"> </span>GoNoGo_Group *<span class="st"> </span>HandDecision +
+<span class="st">    </span>Gender +<span class="st"> </span>InitialSound +<span class="st"> </span>SUBTLEX_LogFrequency +<span class="st"> </span>Syllables |<span class="st"> </span>Subject +<span class="st"> </span>Item,
+    <span class="dt">data =</span> behavioral, <span class="dt">family =</span> binomial, <span class="dt">model_name =</span> <span class="st">&quot;Behavioral Task&quot;</span>,
+    <span class="dt">adapt_delta =</span> <span class="fl">0.99</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">build_summary</span>(behavioral_fit)
+<span class="co">#&gt; bmerBuild for model 'Behavioral Task'</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; bmer(formula = Accuracy ~ (Trial + GoNoGo) * GoNoGo_Group * HandDecision + </span>
+<span class="co">#&gt;     Gender + InitialSound + SUBTLEX_LogFrequency + Syllables | </span>
+<span class="co">#&gt;     Subject + Item, data = behavioral, family = binomial, model_name = &quot;Behavioral Task&quot;, </span>
+<span class="co">#&gt;     adapt_delta = 0.99)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Observations: 14994</span>
+<span class="co">#&gt; Parameters (fixed and random): 670</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Response:</span>
+<span class="co">#&gt;    Family    Name        Class                                 Levels   </span>
+<span class="co">#&gt;  binomial    Accuracy    binary factor coded as integer 0/1    0, 1     </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Fixed Effects:</span>
+<span class="co">#&gt;    Variables</span>
+<span class="co">#&gt;       Factor         Ordered   Levels   Contrasts     Covariate              RegScaled   DataMean   DataSD   </span>
+<span class="co">#&gt;       GoNoGo         FALSE     2        sum           Trial                  TRUE        384.468    221.649  </span>
+<span class="co">#&gt;       GoNoGo_Group   FALSE     2        sum           SUBTLEX_LogFrequency   TRUE        2.697      0.676    </span>
+<span class="co">#&gt;       HandDecision   FALSE     2        sum                                                                  </span>
+<span class="co">#&gt;       Gender         FALSE     2        sum                                                                  </span>
+<span class="co">#&gt;       InitialSound   FALSE     2        sum                                                                  </span>
+<span class="co">#&gt;       Syllables      TRUE      3        scaled poly                                                          </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;    Terms                                                                                                                     </span>
+<span class="co">#&gt;       Trial             HandDecision      SUBTLEX_LogFrequency      GoNoGo:GoNoGo_Group      GoNoGo_Group:HandDecision       </span>
+<span class="co">#&gt;       GoNoGo            Gender            Syllables                 Trial:HandDecision       Trial:GoNoGo_Group:HandDecision </span>
+<span class="co">#&gt;       GoNoGo_Group      InitialSound      Trial:GoNoGo_Group        GoNoGo:HandDecision      GoNoGo:GoNoGo_Group:HandDecision</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Random Effects:</span>
+<span class="co">#&gt;    Group      Levels    Between-Group Factors    Between-Group Covariates   </span>
+<span class="co">#&gt;    Subject    20        GoNoGo_Group             N/A                        </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      The maximal random effect structure is random intercepts and random slopes for:                                                                                                         </span>
+<span class="co">#&gt;       Trial       HandDecision      InitialSound              Syllables               GoNoGo:HandDecision</span>
+<span class="co">#&gt;       GoNoGo      Gender            SUBTLEX_LogFrequency      Trial:HandDecision                         </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;    Group    Levels    Between-Group Factors              Between-Group Covariates   </span>
+<span class="co">#&gt;    Item     24        Gender, InitialSound, Syllables    SUBTLEX_LogFrequency       </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      The maximal random effect structure is random intercepts and random slopes for:                                                                                                                 </span>
+<span class="co">#&gt;       Trial             HandDecision             Trial:HandDecision             Trial:GoNoGo_Group:HandDecision  </span>
+<span class="co">#&gt;       GoNoGo            Trial:GoNoGo_Group       GoNoGo:HandDecision            GoNoGo:GoNoGo_Group:HandDecision </span>
+<span class="co">#&gt;       GoNoGo_Group      GoNoGo:GoNoGo_Group      GoNoGo_Group:HandDecision                                       </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Messages:</span>
+<span class="co">#&gt;    scaling covariates</span>
+<span class="co">#&gt;    sum contrasts set for unordered factors</span>
+<span class="co">#&gt;    scaled orthogonal polynomial contrasts set for ordered factors</span></code></pre></div>
+<p>The summary here is a bit more involved than in the previous example. There are both factors and covariates in the predictors. Within the factors, there are both unordered and ordered. Both random effects groups have between-group factors, and one of them additionally has a between-group covariate. For each group, any term listed as a fixed effect term which involves no variables listed as between-group is included as a slope automatically. As the dataset becomes more complicated, examining the summary of the <strong>bmerBuild</strong> becomes more and more important. Inconsistencies between your expectations and the output of the <strong>bmerBuild</strong> summary may help you find observations which have been miscoded. Additinally, the summary can help you see whether the model you want to run is reasonable by comparing the number of observations you have to the number of parameters a maximal model would require. If there are more parameters than observations, you’ll need to look into dimensionality reduction options for the fixed effects in order to use <em>bmers</em> (in the case of the behavioral task, this is, of course, not the case; there are many more observations than parameters).</p>
+<p>The <strong>bmerFit</strong> summary looks much like the previous example (but of course with more estiamtes), and essentially the same as that reported in Kimball et al. (2016) (the only difference here is that “Syllables” was coded with scaled polynomial contrasts as opposed to polynomial contrasts, and that when the same Bayesian analysis is run twice, very small differences in the estimates may occur, so the values are not going to be 100% <em>exactly</em> the same):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fit_summary</span>(behavioral_fit)
+<span class="co">#&gt; bmerFit for model 'Behavioral Task'</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; bmer(formula = Accuracy ~ (Trial + GoNoGo) * GoNoGo_Group * HandDecision + </span>
+<span class="co">#&gt;     Gender + InitialSound + SUBTLEX_LogFrequency + Syllables | </span>
+<span class="co">#&gt;     Subject + Item, data = behavioral, family = binomial, model_name = &quot;Behavioral Task&quot;, </span>
+<span class="co">#&gt;     adapt_delta = 0.99)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Family: binomial</span>
+<span class="co">#&gt; Response: Accuracy</span>
+<span class="co">#&gt; Observations: 14994</span>
+<span class="co">#&gt; Parameters (fixed and random): 670</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Random Effects:</span>
+<span class="co">#&gt;  Groups       Effect                                               SD      Corr                                                            </span>
+<span class="co">#&gt;  Subject (20) (Intercept)                                          0.7715                                                                  </span>
+<span class="co">#&gt;               Trial                                                0.1913 -0.02                                                            </span>
+<span class="co">#&gt;               GoNoGoGo                                             0.2982  0.01 -0.02                                                      </span>
+<span class="co">#&gt;               HandDecisionGender                                   0.4014 -0.18  0.03  0.05                                                </span>
+<span class="co">#&gt;               Gendermasc                                           0.2446  0.10 -0.06  0.02  0.08                                          </span>
+<span class="co">#&gt;               InitialSoundb                                        0.1448  0.02  0.03  0.02 -0.02 -0.04                                    </span>
+<span class="co">#&gt;               SUBTLEX_LogFrequency                                 0.2815 -0.09  0.08  0.03  0.03 -0.12  0.03                              </span>
+<span class="co">#&gt;               Syllables.L                                          0.2009  0.01  0.00  0.00  0.02  0.02  0.04  0.07                        </span>
+<span class="co">#&gt;               Syllables.Q                                          0.2246  0.02  0.08 -0.04 -0.03 -0.04 -0.02  0.02  0.02                  </span>
+<span class="co">#&gt;               Trial:HandDecisionGender                             0.2252  0.04  0.03  0.03  0.03 -0.07  0.01  0.06 -0.02  0.04            </span>
+<span class="co">#&gt;               GoNoGoGo:HandDecisionGender                          0.4703  0.17  0.02  0.03 -0.23 -0.05 -0.08 -0.09 -0.05  0.10  0.02      </span>
+<span class="co">#&gt;  Item (24)    (Intercept)                                          0.2568                                                                  </span>
+<span class="co">#&gt;               Trial                                                0.1597  0.02                                                            </span>
+<span class="co">#&gt;               GoNoGoGo                                             0.2507  0.01  0.02                                                      </span>
+<span class="co">#&gt;               GoNoGo_GroupGender First                             0.1301  0.03 -0.01  0.00                                                </span>
+<span class="co">#&gt;               HandDecisionGender                                   0.2162 -0.02 -0.04 -0.01 -0.01                                          </span>
+<span class="co">#&gt;               Trial:GoNoGo_GroupGender First                       0.1740  0.01 -0.02 -0.04  0.02 -0.08                                    </span>
+<span class="co">#&gt;               GoNoGoGo:GoNoGo_GroupGender First                    0.1515  0.01 -0.04  0.00 -0.04  0.01  0.03                              </span>
+<span class="co">#&gt;               Trial:HandDecisionGender                             0.1563  0.01  0.03  0.04 -0.05  0.00 -0.01 -0.05                        </span>
+<span class="co">#&gt;               GoNoGoGo:HandDecisionGender                          0.1502 -0.01  0.01  0.04  0.00 -0.04 -0.05  0.02  0.04                  </span>
+<span class="co">#&gt;               GoNoGo_GroupGender First:HandDecisionGender          0.1246 -0.03 -0.07  0.00 -0.01 -0.01  0.00 -0.01 -0.01  0.00            </span>
+<span class="co">#&gt;               Trial:GoNoGo_GroupGender First:HandDecisionGender    0.1873 -0.03 -0.02 -0.03  0.01  0.03  0.04  0.00  0.00 -0.01 -0.03      </span>
+<span class="co">#&gt;               GoNoGoGo:GoNoGo_GroupGender First:HandDecisionGender 0.2171  0.02 -0.01  0.05  0.01 -0.08  0.02 -0.03 -0.03 -0.04 -0.01 -0.01</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Fixed Effects:</span>
+<span class="co">#&gt;  Effect                                                Mean   SD      2.5%    97.5%  Neff   Rhat   P(&gt;0)   </span>
+<span class="co">#&gt;  (Intercept)                                           5.1627 0.2974  4.5951  5.7622 2715.8 1.0019 &gt; 0.9999</span>
+<span class="co">#&gt;  Trial                                                 0.2221 0.1467 -0.0515  0.5263 4000.0 1.0006   0.9385</span>
+<span class="co">#&gt;  GoNoGoGo                                             -0.6729 0.1567 -0.9751 -0.3532 2947.1 1.0015   0.0002</span>
+<span class="co">#&gt;  GoNoGo_GroupGender First                              0.1364 0.1931 -0.2272  0.5277 3432.7 1.0009   0.7570</span>
+<span class="co">#&gt;  HandDecisionGender                                    0.1960 0.1692 -0.1146  0.5573 4000.0 0.9999   0.8858</span>
+<span class="co">#&gt;  Gendermasc                                           -0.0222 0.1158 -0.2511  0.2079 4000.0 1.0001   0.4162</span>
+<span class="co">#&gt;  InitialSoundb                                         0.0503 0.1160 -0.1759  0.2761 4000.0 1.0002   0.6712</span>
+<span class="co">#&gt;  SUBTLEX_LogFrequency                                  0.0402 0.1405 -0.2434  0.3188 4000.0 0.9995   0.6245</span>
+<span class="co">#&gt;  Syllables.L                                           0.1109 0.2152 -0.2940  0.5573 4000.0 0.9996   0.6992</span>
+<span class="co">#&gt;  Syllables.Q                                           0.2292 0.1625 -0.0722  0.5642 3629.9 1.0004   0.9300</span>
+<span class="co">#&gt;  Trial:GoNoGo_GroupGender First                       -0.2051 0.1474 -0.4987  0.0631 4000.0 1.0000   0.0748</span>
+<span class="co">#&gt;  GoNoGoGo:GoNoGo_GroupGender First                     0.0531 0.1152 -0.1759  0.2831 4000.0 0.9995   0.6852</span>
+<span class="co">#&gt;  Trial:HandDecisionGender                              0.0382 0.1416 -0.2465  0.3202 4000.0 0.9994   0.6018</span>
+<span class="co">#&gt;  GoNoGoGo:HandDecisionGender                          -0.0787 0.1352 -0.3437  0.1894 4000.0 0.9997   0.2735</span>
+<span class="co">#&gt;  GoNoGo_GroupGender First:HandDecisionGender          -0.0293 0.1559 -0.3585  0.2671 4000.0 0.9995   0.4248</span>
+<span class="co">#&gt;  Trial:GoNoGo_GroupGender First:HandDecisionGender     0.0624 0.1453 -0.2212  0.3605 4000.0 1.0002   0.6647</span>
+<span class="co">#&gt;  GoNoGoGo:GoNoGo_GroupGender First:HandDecisionGender -0.1343 0.1374 -0.4129  0.1338 4000.0 1.0001   0.1565</span></code></pre></div>
+<p> </p>
+</div>
+<div id="scaling-and-contrasts" class="section level1">
+<h1>Scaling and Contrasts</h1>
+<p>With the default settings in <strong>bmer_control</strong>, all continuous variables (fixed-effect covariates and, in Gaussian regressions, the response) are scaled (i.e. mean-centered and divided by their standard deviations) so that they have mean 0 and standard deviation 1. Sum contrasts are set for unordered factors rather than treatment contrasts, and scaled orthogonal polynomial contrasts (where the standard deviation of each column in the contrast matrix is 1) are set for ordered factors rather than the matrix normally obtained from contr.poly. Examples of these contrasts for an unordered factor x1 with levels A, B and C, and for an ordered factor x2 with levels 1, 2, 3, and 4 are:</p>
+<p>x1 (treatment contrasts)</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">x1 Level</th>
+<th align="right">x1B</th>
+<th align="right">x1C</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">A</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">B</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">C</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<p>x1 (sum contrasts)</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">x1 Level</th>
+<th align="right">x1A</th>
+<th align="right">x1B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">A</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">B</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">C</td>
+<td align="right">-1</td>
+<td align="right">-1</td>
+</tr>
+</tbody>
+</table>
+<p>x2 (orthogonal polynomial contrasts)</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">x2 Level</th>
+<th align="right">x2.L</th>
+<th align="right">x2.Q</th>
+<th align="right">x2.C</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="right">-0.671</td>
+<td align="right">0.500</td>
+<td align="right">-0.224</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="right">-0.224</td>
+<td align="right">-0.500</td>
+<td align="right">0.671</td>
+</tr>
+<tr class="odd">
+<td align="left">3</td>
+<td align="right">0.224</td>
+<td align="right">-0.500</td>
+<td align="right">-0.671</td>
+</tr>
+<tr class="even">
+<td align="left">4</td>
+<td align="right">0.671</td>
+<td align="right">0.500</td>
+<td align="right">0.224</td>
+</tr>
+</tbody>
+</table>
+<p>x2 (scaled orthogonal polynomial contrasts)</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">x2 Level</th>
+<th align="right">x2.L</th>
+<th align="right">x2.Q</th>
+<th align="right">x2.C</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="right">-1.162</td>
+<td align="right">0.866</td>
+<td align="right">-0.387</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="right">-0.387</td>
+<td align="right">-0.866</td>
+<td align="right">1.162</td>
+</tr>
+<tr class="odd">
+<td align="left">3</td>
+<td align="right">0.387</td>
+<td align="right">-0.866</td>
+<td align="right">-1.162</td>
+</tr>
+<tr class="even">
+<td align="left">4</td>
+<td align="right">1.162</td>
+<td align="right">0.866</td>
+<td align="right">0.387</td>
+</tr>
+</tbody>
+</table>
+<p>This default behavior for scaling and contrasts is important for three reasons:</p>
+<ol style="list-style-type: decimal">
+<li>It forces the intercept to represent the grand mean (predicted value for an observation which is average in every way), rather than the mean for a particular group of observations, or at a particular (likely extreme) value of a covariate. This additionally makes the computation of group means and pairwise comparisons more straightforward.</li>
+<li>The interpretation of the results is more straightforward (i.e. it is easier to compare effect magnitudes).</li>
+<li>It makes the default weakly informative priors reasonable, as all of the coefficients are being estimated on the same scale and can be assigned a prior centered at zero.</li>
+</ol>
+<p> </p>
+</div>
+<div id="bmer_control-and-default-priors" class="section level1">
+<h1>bmer_control and default priors</h1>
+<p>So long as <em>scale_cont</em> and <em>set_contr</em> are both TRUE in <strong>bmer_control</strong> (the defaults), then the following default priors (bolded terms are alterable in <strong>bmer_control</strong>) are in terms of standarde deviations of the response (family = gaussian) or log-odds (family = binomial):</p>
+<ul>
+<li>beta ~ t(<strong>nu_beta = 5</strong>, 0, s_beta)</li>
+<li>s_beta = <strong>scale_beta = 2</strong> if fewer than 10 fixed effect coefficients</li>
+<li>s_beta ~ half_normal(0, <strong>sc_beta = 1</strong>) if 10 or more fixed effect coefficients</li>
+<li>sigma_random_intercept ~ half_normal(0, <strong>sc_q0 = 1.5</strong>)</li>
+<li>sigma_random_slope ~ half_normal(0, <strong>sc_qs = 1</strong>)</li>
+<li>gamma_random ~ mulitvariate_normal(0, sigma_random, omega_random)</li>
+<li>omega_random ~ LKJ(<strong>eta_q = 2</strong>)</li>
+<li>[Gaussian] sigma_residual ~ half_normal(0, <strong>sc_res = 0.5</strong>)</li>
+<li>[Gaussian] y ~ normal(Xb + Zg, sigma_residual)</li>
+<li>[Logistic] ln[p/(1-p)] = Xb + Zg</li>
+<li>[Logistic] y ~ Bernoulli(p)</li>
+</ul>
+<p>That is, the fixed effect regression coefficients are assigned independent t-distribution priors with 5 degrees of freedom and mean 0. The scale of the prior distribution is 2 if there are fewer than 10 fixed effect coefficients, and is an estimated hyper-parameter with a half-normal(0,1) distribution if there are 10 or more fixed effect coefficients. The standard deviations of random intercepts are assigned a half-normal(0,1.5) prior and the standard deviations of random slopes are assigned a half-normal(0,1) prior. The random effect estimates (i.e. the individual intercepts and slopes for members of the random effect group) are assigned a multivariate normal prior with mean zero and a correlation matrix whose hyper-prior is LKJ(2). The covariance matrix for the random effects does not itself receive a prior, but rather is obtained from the standard deviations and correlation matrix. For gaussian regressions, the standard deviation of the residual error is assigned a half-normal(0,0.5) prior. These default priors can be changed with <strong>bmer_control</strong>. All parameters are implemented in the <em>Stan</em> code using reparameterization (see the <em>Stan</em> reference manual; link to <em>Stan</em> website provided in <em>References</em> section).</p>
+<p>If <em>scale_cont</em> is set to FALSE in <strong>bmer_control</strong>, then the covariates and Gaussian responses are left as-is, and if <em>set_contr</em> is set to FALSE in <strong>bmer_control</strong>, then factor contrasts are not checked. Doing either of these things risks the priors not making sense, as the priors are centered at zero. The covariate scaling and contrast setting do not change the ultimate results, but rather the scale on which the numerical value of the estimates are expressed.</p>
+<p> </p>
+</div>
+<div id="na-values" class="section level1">
+<h1>NA values</h1>
+<p>If there are NA values (which must be NA, not a character “NA”, i.e. <code>is.na(x)</code> should return TRUE), these can be handled (with the appropriate settings in <strong>bmer_control</strong>) in the following way. Consider a hypothetical linguistic study in which three dialects are being compared. Dialects A and B have both monolingual and bilingual speakers, while dialect C is monolingual. All subjects in the hypothetical study performed a reading task where there are repeated measures on items in addition to repeated measures on the subjects, and the same subjects then participated in an informal interview. In this case, being monolingual in dialect C does not mean the same thing as being monolingual in dialects A and B, where the factor is contrastive. In all three dialects, there are repeated measures on items in part of the data (when the factor <em>task</em> is “Reading”), but not in the part of the data (when the factor <em>task</em> is “Interview”). Then we have three factors, <em>dialect</em> with levels A, B, and C; <em>bilingual</em> with levels yes and no for dialects A and B and set to NA for dialect C; and <em>task</em> with levels Reading and Interview. The random grouping factor <em>subject</em> would have a value for all observations, and the random grouping factor <em>item</em> would have item identifiers when <em>task</em> is “Reading” and NA values when <em>task</em> is “Interview”. If we are interested in modeling a continuous dependent variable <em>y</em> with these three factors and all second-order interactions as fixed effects, we would call:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">bmer</span>(y ~<span class="st"> </span>(dialect +<span class="st"> </span>bilingual +<span class="st"> </span>task)^<span class="dv">2</span> |<span class="st"> </span>subject +<span class="st"> </span>item,
+    <span class="dt">data =</span> mydata, <span class="dt">family =</span> gaussian,
+    <span class="dt">control =</span> <span class="kw">bmer_control</span>(<span class="dt">fixef_na =</span> <span class="ot">TRUE</span>, <span class="dt">ranef_na =</span> <span class="ot">TRUE</span>))</code></pre></div>
+<p>The contrasts for the main effects of <em>dialect</em>, <em>bilingual</em>, and <em>task</em> would be:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">dialect</th>
+<th align="right">dialectA</th>
+<th align="right">dialectB</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">A</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">B</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">C</td>
+<td align="right">-1</td>
+<td align="right">-1</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left">bilingual</th>
+<th align="right">bilingualNo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">No</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Yes</td>
+<td align="right">-1</td>
+</tr>
+<tr class="odd">
+<td align="left">NA</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left">task</th>
+<th align="right">taskReading</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Reading</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Interview</td>
+<td align="right">-1</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<p>The interaction between <em>dialect</em> and <em>task</em> and the interaction between <em>bilingual</em> and <em>task</em> use these same contrasts multiplied together:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">dialect:task</th>
+<th align="right">dialectA:taskReading</th>
+<th align="right">dialectB:taskReading</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">A:Reading</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">B:Reading</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">C:Reading</td>
+<td align="right">-1</td>
+<td align="right">-1</td>
+</tr>
+<tr class="even">
+<td align="left">A:Interview</td>
+<td align="right">-1</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">B:Interview</td>
+<td align="right">0</td>
+<td align="right">-1</td>
+</tr>
+<tr class="even">
+<td align="left">C:Interview</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left">bilingual:task</th>
+<th align="right">bilingualNo:taskReading</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">No:Reading</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Yes:Reading</td>
+<td align="right">-1</td>
+</tr>
+<tr class="odd">
+<td align="left">NA:Reading</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">No:Interview</td>
+<td align="right">-1</td>
+</tr>
+<tr class="odd">
+<td align="left">Yes:Interview</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">NA:Interview</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<p>However, the interaction between <em>dialect</em> and <em>bilingual</em> would produce the following (undesirable) contrasts if evaluated merely by multiplying the main effect contrasts (where impossible combinations are such as C:Yes and A:NA are excluded):</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">dialect:bilingual</th>
+<th align="right">dialectA:bilingualNo</th>
+<th align="right">dialectB:bilingualNo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">A:No</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">B:No</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">A:Yes</td>
+<td align="right">-1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">B:Yes</td>
+<td align="right">0</td>
+<td align="right">-1</td>
+</tr>
+<tr class="odd">
+<td align="left">C:NA</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<p>The reason that these contrasts are undesirable is they introduce an unnecessary parameter. This same interaction term is instead represented using the following (determined automatically by <em>bmers</em>):</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">dialect:bilingual</th>
+<th align="right">nai_dialectA:bilingualNo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">A:No</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">B:No</td>
+<td align="right">-1</td>
+</tr>
+<tr class="odd">
+<td align="left">A:Yes</td>
+<td align="right">-1</td>
+</tr>
+<tr class="even">
+<td align="left">B:Yes</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">C:NA</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>That is, the factor <em>dialect</em> has the following redefined contrasts <strong>only for the interaction term</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">dialect</th>
+<th align="right">dialectA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">A</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">B</td>
+<td align="right">-1</td>
+</tr>
+<tr class="odd">
+<td align="left">C</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>This change in contrasts is used only for the interaction term, not the main effects, and this information is logged as part of the <strong>bmerBuild</strong> (and in the regression the interaction coefficients are prefixed by “nai_” so they stick out). In the case of the random effects for subject, random intercepts and random slopes for the main effect of <em>task</em> are determined by the function to be the maximal random effect structure, but no slopes for any of the other fixed effects since they all involve at least one between-subject predictor. For the random effects for item, random intercepts and random slopes for <em>dialect</em>, <em>bilingual</em>, and the interaction <em>dialect:bilingual</em> are determined by the function to be the maximal random effect structure, but no slopes for <em>task</em> or any interaction involving <em>task</em>, as <em>task</em> is always “Reading” for any observation where item is not set to NA. For all observations with <em>task</em> = “Interview”, because item is set to NA, all columns in the item random effect matrix will be set to zero (i.e. the columns of the item Z-matrix only have non-zero values for observations where item is not NA).</p>
+<p> </p>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<div id="bmers" class="section level2">
+<h2>bmers</h2>
+<p>If you use <em>bmers</em>, please cite it as:</p>
+<p>Eager, Christopher D. (2017). bmers: Bayesian mixed effects regressions fit with Stan. <a href="https://github.com/CDEager/bmers" class="uri">https://github.com/CDEager/bmers</a>.</p>
+<p>Also make sure to cite <em>Stan</em> and <em>RStan</em> (call <code>citation(&quot;rstan&quot;)</code> in R), and to cite R itself.</p>
+</div>
+<div id="perception-experiment" class="section level2">
+<h2>Perception experiment</h2>
+<p>Cole, J., Hualde, J.I., Eager, C.D. and Mahrt, T. (2015). On the prominence of accent in stress reversal. In The Scottish Consortium for ICPhS 2015 (Ed.), Proceedings of the 18th International Congress of Phonetic Sciences. Glasgow, UK: the University of Glasgow. Supported by NSF BCS 12-51343. <a href="https://www.internationalphoneticassociation.org/icphs-proceedings/ICPhS2015/Papers/ICPHS0771.pdf" class="uri">https://www.internationalphoneticassociation.org/icphs-proceedings/ICPhS2015/Papers/ICPHS0771.pdf</a></p>
+</div>
+<div id="behavioral-task" class="section level2">
+<h2>Behavioral Task</h2>
+<p>Shantz, K. &amp; Tanner, D. (2017). Talking out of order: Task order and retrieval of grammatical gender and phonology in lexical access. Language, Cognition and Neuroscience 32(1), 82-101.</p>
+<p>For an application of Bayesian methods with this same dataset, see the following (the coding of the ‘Syllables’ factor is slightly different in the scaling of the contrasts; but the model is essentially the same):</p>
+<p>Kimball, A., Shantz, K., Eager, C.D., and Roy, J. (2016). Beyond Maximal Random Effects for Logistic Regression: Moving Past Convergence Problems. <a href="https://arxiv.org/abs/1611.00083" class="uri">https://arxiv.org/abs/1611.00083</a></p>
+</div>
+<div id="stan-links" class="section level2">
+<h2>Stan links</h2>
+<p>Stan homepage: <a href="http://mc-stan.org/" class="uri">http://mc-stan.org/</a></p>
+<p>RStan installation: <a href="https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started" class="uri">https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started</a></p>
+<p> </p>
+<p> </p>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
