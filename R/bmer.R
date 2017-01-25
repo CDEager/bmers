@@ -1,4 +1,4 @@
-#' Bayeisan mixed effects regression.
+#' Bayesian mixed effects regression.
 #'
 #' Fit a Bayesian mixed effects regression with a maximal random effects structure
 #' and weakly informative priors in Stan through the rstan interface using NUTS.
