@@ -1,4 +1,4 @@
-# The _bmers_ package
+# The _bmers_ package (0.1.1)
 
 The _bmers_ package (Bayesian Mixed Effects Regressions fit with Stan) fits Bayesian mixed effects regressions with weakly informative priors and maximal random effects structures in _Stan_ with the No U-Turn Sampler (through the _RStan_ interface).  The maximal random effects structure is determined automatically, and only the fixed effects structure and the random effects grouping factors need to be specified.  Continuous variables are automatically scaled, and factor contrasts are automatically set; neither of these needs to be done beforehand.  NA values in both the fixed effects and random effects are supported through the use of sum contrasts with NAs set to zero in the model matrix.
 

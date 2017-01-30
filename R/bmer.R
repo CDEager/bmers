@@ -121,8 +121,6 @@ fit_bmer_build <- function(build, adapt_delta = 0.8, max_treedepth = 10, ...){
 
 	fit <- bmerFit(call = mc, build = build)
 	
-	cat("",paste("Fitting model '",build@name,"' ...",sep=""),"",sep="\n")
-  
   possfail <- tryCatch(smdir <- find.package("bmers"), error = function(e) e)  
   
   if(inherits(possfail,"error")){
@@ -133,6 +131,7 @@ fit_bmer_build <- function(build, adapt_delta = 0.8, max_treedepth = 10, ...){
     setwd(smdir)
     smfiles <- list.files()
     if(build@stanmod %in% smfiles){
+      cat("Loading previously compiled stanmodel...")
       stanmod <- readRDS(build@stanmod)
     } else {
       cat("Compiling new stanmodel...")
@@ -142,6 +141,8 @@ fit_bmer_build <- function(build, adapt_delta = 0.8, max_treedepth = 10, ...){
     setwd(currwd)
   }
 
+	cat("",paste("Fitting model '",build@name,"' ...",sep=""),"",sep="\n")
+  
 	fit.stan <- rstan::sampling(object = stanmod, data = build@data, algorithm = "NUTS",
 		pars = unlist(lapply(build@pars,function(x) x$name)), show_messages = FALSE,
 		control = list(adapt_delta = adapt_delta, max_treedepth = max_treedepth), ...)
