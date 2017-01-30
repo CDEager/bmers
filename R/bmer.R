@@ -126,6 +126,7 @@ fit_bmer_build <- function(build, adapt_delta = 0.8, max_treedepth = 10, ...){
   possfail <- tryCatch(smdir <- find.package("bmers"), error = function(e) e)  
   
   if(inherits(possfail,"error")){
+    cat("Compiling new stanmodel...")
     stanmod <- rstan::stan_model(model_name = build@stanmod, model_code = build@stancode)
   } else {
     currwd <- getwd()
@@ -134,18 +135,16 @@ fit_bmer_build <- function(build, adapt_delta = 0.8, max_treedepth = 10, ...){
     if(build@stanmod %in% smfiles){
       stanmod <- readRDS(build@stanmod)
     } else {
+      cat("Compiling new stanmodel...")
       stanmod <- rstan::stan_model(model_name = build@stanmod, model_code = build@stancode)
       saveRDS(stanmod,file=build@stanmod)
     }
     setwd(currwd)
   }
 
-  oldwarn <- getOption("warn")
-  options(warn = -1) # warnings are suppressed from the stan function but are generated later
 	fit.stan <- rstan::sampling(object = stanmod, data = build@data, algorithm = "NUTS",
 		pars = unlist(lapply(build@pars,function(x) x$name)), show_messages = FALSE,
 		control = list(adapt_delta = adapt_delta, max_treedepth = max_treedepth), ...)
-  options(warn = oldwarn)
   
   p <- build@pars
   for(i in 1:length(p)){

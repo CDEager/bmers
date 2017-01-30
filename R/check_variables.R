@@ -261,30 +261,14 @@ na_interaction <- function(fr,v,gridlevs=NULL){
       x[,j] <- as.character(x[,j])
       ux.temp[,j] <- as.character(ux.temp[,j])
     }
+    rownames(ux.temp) <- 1:nrow(ux.temp)
     ux.old <- ux.new <- ux.temp
     
-    inter <- na_interaction_2_unordered(ux.temp[,1:2])
-    changed <- changed | inter$changed
-    ux.new[,1] <- inter$ux[,1]
-    ux.new[,2] <- inter$ux[,2]
-    ux.temp[,2] <- NA
-    temp <- apply(ux.new[,1:2],1,function(n) !any(is.na(n)))
-    ux.temp[temp,2] <- apply(ux.new[temp,1:2],1,function(n) paste(n,collapse="."))
-    ux.temp <- ux.temp[,-1]
-
-    currcol <- 3
-    nc <- nc - 1
-    while(nc > 1){
-      inter <- na_interaction_2_unordered(ux.temp[,1:2])
-      changed <- changed | inter$changed
-      ux.new[,currcol] <- inter$ux[,2]
-      temp <- is.na(inter$ux[,2])
-      ux.new[temp,1:(currcol-1)] <- NA
-      ux.temp[temp,1] <- apply(ux.temp[temp,1:2],1,function(n) paste(n,collapse="."))
-      ux.temp <- ux.temp[,-2]
-      nc <- nc - 1
-      currcol <- currcol + 1
-    }
+    rx <- ux.new[apply(!is.na(ux.new), 1, all), , drop = FALSE]
+    if(nrow(rx)==0) stop("collinearity in the interaction term ",
+      paste(g,collapse=":"))
+    rn <- which(!(rownames(ux.new) %in% rownames(rx)))
+    ux.new[rn, ] <- NA
     
     for(j in cnms){
       temp <- sort(unique(ux.new[,j]))
