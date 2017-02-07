@@ -1,7 +1,7 @@
 Package: bmers
 Type: Package
 Title: Bayesian Mixed Effects Regressions Fit with Stan
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: person("Christopher D.", "Eager",
     email = "eagerstats@gmail.com", role = c("aut","cre"))
 Description: bmers fits Bayesian mixed effects regressions with weakly

@@ -15,8 +15,8 @@
 #' @slot set_contr Logical. If TRUE (the default), sum contrasts are set for unordered factors and scaled orthogonal polynomial
 #' contrasts are set for ordered factors prior to regression. If FALSE (highly not recommended), factor contrasts are not checked.
 #' @slot estimate_scale_beta Character. One of "P", "yes", or "no". If "yes", the scale of the fixed effect t-distribution prior
-#' is estimated with a hyper-prior which is assigned a half-normal distribution with scale \code{sc_beta}. If "no", the prior scale
-#' is not estimated with a hyper-prior, and is instead given a value of \code{scale_beta}.  If "P" (the default), then
+#' is estimated with a hyper-prior which is assigned a half-normal distribution with scale \code{sc_beta}. If "no" (the default), the prior scale
+#' is not estimated with a hyper-prior, and is instead given a value of \code{scale_beta}.  If "P", then
 #' \code{estimate_scale_beta} is interpreted as "yes" if there are 10 or more fixed effect coefficients, and as "no" if there are
 #' fewer than 10 fixed effect coefficients.
 #' @slot sc_beta Numeric (default 1; must be greater than 0). The scale for the half-normal hyper-prior on the scale of the
@@ -66,7 +66,7 @@ bmerControl <- setClass("bmerControl",
     verbose = FALSE,
     scale_cont = TRUE,
     set_contr = TRUE,
-    estimate_scale_beta = "P",
+    estimate_scale_beta = "no",
     sc_beta = 1,
     scale_beta = 2,
     nu_beta = 5,

@@ -1,5 +1,5 @@
 bmers_version <- function(){
-  return("0.1.1")
+  return("0.1.2")
 }
 
 #' Get the \linkS4class{bmerBuild} stored in a \linkS4class{bmerFit}.
